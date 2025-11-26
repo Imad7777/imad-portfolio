@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Designer Portfolio</title>
+    <!-- Tailwind CSS (Styling) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            },
+            colors: {
+              primary: '#1a1a1a',
+              secondary: '#6b7280',
+              accent: '#3b82f6',
+              surface: '#f3f4f6',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      /* Card Hover Effect */
+      .project-card:hover .project-image { transform: scale(1.1); }
+      .project-card:hover .arrow-icon { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body class="bg-white text-primary antialiased selection:bg-black selection:text-white">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0">
+                    <a href="#" id="nav-logo" class="text-xl font-bold tracking-tight text-primary">PORTFOLIO</a>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <div id="desktop-menu" class="ml-10 flex items-baseline space-x-8">
+                        <!-- Links injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="-mr-2 flex md:hidden">
+                    <button id="mobile-menu-btn" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-primary hover:bg-gray-100 focus:outline-none">
+                        <i data-lucide="menu" id="menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-100 absolute w-full">
+            <div id="mobile-menu-links" class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <!-- Links injected by JS -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-screen flex items-center pt-20">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+            <div class="max-w-4xl">
+                <p id="hero-role" class="text-sm md:text-base font-medium text-secondary mb-6 tracking-widest uppercase"></p>
+                <h1 id="hero-tagline" class="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-primary leading-[1.1] mb-8"></h1>
+                <p id="hero-bio" class="text-lg md:text-xl text-secondary max-w-2xl leading-relaxed mb-12"></p>
+                
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#work" class="inline-flex items-center justify-center px-8 py-4 bg-primary text-white text-sm font-semibold rounded-full hover:bg-black transition-all hover:scale-105">
+                        View Work
+                    </a>
+                    <a href="#contact" class="inline-flex items-center justify-center px-8 py-4 bg-gray-100 text-primary text-sm font-semibold rounded-full hover:bg-gray-200 transition-all hover:scale-105">
+                        Contact Me
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce hidden md:flex flex-col items-center text-secondary">
+            <span class="text-xs mb-2">Scroll</span>
+            <i data-lucide="arrow-down" class="w-5 h-5"></i>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="work" class="py-24 bg-surface">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Selected Work</h2>
+                    <p class="text-secondary max-w-md">A collection of projects exploring the intersection of design, technology, and human experience.</p>
+                </div>
+                <!-- Filters -->
+                <div id="portfolio-filters" class="flex flex-wrap gap-2">
+                    <!-- Filters injected by JS -->
+                </div>
+            </div>
+
+            <!-- Grid -->
+            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Projects injected by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-primary mb-8">About Me</h2>
+                    <div id="about-text" class="prose prose-lg text-secondary space-y-6">
+                        <!-- About text injected by JS -->
+                    </div>
+                </div>
+                <div class="bg-surface rounded-3xl p-8 md:p-12">
+                    <h3 class="text-2xl font-bold text-primary mb-8">Capabilities</h3>
+                    <div id="skills-container" class="space-y-8">
+                        <!-- Skills injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <footer id="contact" class="bg-primary text-white py-24">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 mb-20">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">Let's work together.</h2>
+                    <p class="text-gray-400 text-lg max-w-md mb-8">Have a project in mind? Reach out and let's create something meaningful.</p>
+                    <a id="contact-email" href="" class="inline-flex items-center text-2xl font-bold border-b-2 border-accent pb-1 hover:text-accent transition-colors"></a>
+                    <div class="mt-8 flex items-center text-gray-400">
+                        <i data-lucide="map-pin" class="w-5 h-5 mr-2"></i>
+                        <span id="contact-location"></span>
+                    </div>
+                </div>
+                <div class="flex flex-col justify-end">
+                    <div id="social-links" class="flex flex-wrap gap-4">
+                        <!-- Socials injected by JS -->
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+                <p id="copyright"></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 1. Load Data -->
+    <script src="constants.js"></script>
+    <!-- 2. Load Application Logic -->
+    <script src="script.js"></script>
+</body>
+</html>
