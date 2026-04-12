@@ -1,170 +1,578 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Designer Portfolio</title>
-    <!-- Tailwind CSS (Styling) -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>王耀颉 (imad) · TRY — 智能交互 &amp; AI 产品</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            },
-            colors: {
-              primary: '#1a1a1a',
-              secondary: '#6b7280',
-              accent: '#3b82f6',
-              surface: '#f3f4f6',
-            }
-          }
-        }
-      }
-    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.css">
     <style>
-      .no-scrollbar::-webkit-scrollbar { display: none; }
-      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      /* Card Hover Effect */
-      .project-card:hover .project-image { transform: scale(1.1); }
-      .project-card:hover .arrow-icon { opacity: 1; transform: translateY(0); }
+        :root {
+            --ln-lime: #d4ff00;
+            --ln-hover-lime: #39ff14;
+            --ln-bg: #050505;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .ln-body {
+            font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
+            background: var(--ln-bg);
+        }
+        .ln-display { font-family: "Bebas Neue", Oswald, sans-serif; }
+        .ln-accent-text { color: var(--ln-lime) !important; }
+        .nav-scrolled {
+            background: rgba(5, 5, 5, 0.92) !important;
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .ln-reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.9s cubic-bezier(0.23,1,0.32,1), transform 0.9s cubic-bezier(0.23,1,0.32,1); }
+        .ln-reveal-on { opacity: 1; transform: none; }
+        /* 逐行入场：上移 40px，0.8s easeOutExpo，每行 delay 0.1s */
+        .ln-line {
+            display: block;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+            transition-delay: calc(var(--ln-i, 0) * 0.1s);
+        }
+        .ln-line-visible { opacity: 1; transform: translateY(0); }
+        .ln-line-inline { display: inline-block; }
+        /* 按钮 hover：透明底 → 荧光青柠，字白 → 黑，0.3s easeOutQuart */
+        .ln-btn {
+            background-color: transparent;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.28);
+            transition:
+                background-color 0.3s var(--ease-out-quart),
+                color 0.3s var(--ease-out-quart),
+                border-color 0.3s var(--ease-out-quart),
+                transform 0.3s var(--ease-out-quart);
+        }
+        .ln-btn:hover {
+            background-color: var(--ln-hover-lime);
+            color: #000;
+            border-color: var(--ln-hover-lime);
+        }
+        .ln-btn-solid {
+            background-color: var(--ln-lime);
+            color: #000;
+            border: 1px solid var(--ln-lime);
+        }
+        .ln-btn-solid:hover {
+            background-color: var(--ln-hover-lime);
+            border-color: var(--ln-hover-lime);
+            color: #000;
+        }
+        /* 首屏视差层：位移跟随后 0.1s 延迟（transition-delay） */
+        #hero-parallax-img,
+        #hero-parallax-text-inner {
+            will-change: transform;
+            transition: transform 0.5s var(--ease-out-quart);
+            transition-delay: 0.1s;
+        }
+        html.lenis-smooth .ln-parallax-disabled #hero-parallax-img,
+        html.lenis-smooth .ln-parallax-disabled #hero-parallax-text-inner { transition: none; }
+        .ln-marquee-wrap { overflow: hidden; border-block: 1px solid rgba(255,255,255,0.08); background: #080808; }
+        .ln-marquee {
+            display: flex; width: max-content; animation: ln-marquee 28s linear infinite;
+        }
+        @keyframes ln-marquee {
+            to { transform: translateX(-50%); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .ln-marquee { animation: none; }
+            .ln-reveal { opacity: 1; transform: none; transition: none; }
+            .ln-line { opacity: 1; transform: none; transition: none; }
+            #hero-parallax-img, #hero-parallax-text-inner { transition: none; }
+            .ln-card, .ln-card-img, .ln-more-card { transition: none; }
+            .ln-card:hover, .ln-more-card:hover { transform: none; }
+        }
+        /* 卡片 hover：整体 1.02，图 1.05，0.4s */
+        .ln-card {
+            transition: transform 0.4s var(--ease-out-quart), border-color 0.4s var(--ease-out-quart), box-shadow 0.4s var(--ease-out-quart);
+        }
+        .ln-card:hover { transform: scale(1.02); }
+        .ln-card-img {
+            transition: transform 0.4s var(--ease-out-quart);
+        }
+        .ln-card:hover .ln-card-img { transform: scale(1.05); }
+        .ln-more-card {
+            transition: transform 0.4s var(--ease-out-quart), border-color 0.4s var(--ease-out-quart);
+        }
+        .ln-more-card:hover { transform: scale(1.02); }
+        .ln-hero-grid {
+            background:
+                radial-gradient(ellipse 80% 60% at 70% 20%, rgba(212, 255, 0, 0.06), transparent 55%),
+                linear-gradient(180deg, #050505 0%, #0a0a0a 100%);
+        }
+        #project-modal.flex:not(.modal-open) { opacity: 0; }
+        #project-modal.modal-open { animation: modalBackdropIn 0.28s ease both; }
+        @keyframes modalBackdropIn { from { opacity: 0; } to { opacity: 1; } }
+        #modal-panel.modal-panel-open { animation: modalPanelIn 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+        @keyframes modalPanelIn {
+            from { opacity: 0; transform: scale(0.94) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .ln-card, #project-modal, #modal-panel { transition: none !important; animation: none !important; }
+            #project-modal.modal-open { opacity: 1 !important; }
+            #modal-panel.modal-panel-open { opacity: 1 !important; transform: none !important; }
+        }
+        .ln-scroll-hint { animation: ln-bounce 2.2s ease-in-out infinite; }
+        @keyframes ln-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+        @media (prefers-reduced-motion: reduce) { .ln-scroll-hint { animation: none; } }
     </style>
 </head>
-<body class="bg-white text-primary antialiased selection:bg-black selection:text-white">
+<body class="ln-body text-white overflow-x-hidden antialiased">
+    <p class="fixed bottom-4 left-1/2 -translate-x-1/2 z-[60] text-[10px] uppercase tracking-[0.35em] text-white/35 pointer-events-none max-w-[90vw] text-center md:hidden landscape:hidden">横屏浏览体验更接近参考站</p>
 
-    <!-- Navigation -->
-    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <div class="flex-shrink-0">
-                    <a href="#" id="nav-logo" class="text-xl font-bold tracking-tight text-primary">PORTFOLIO</a>
-                </div>
-                
-                <!-- Desktop Menu -->
-                <div class="hidden md:block">
-                    <div id="desktop-menu" class="ml-10 flex items-baseline space-x-8">
-                        <!-- Links injected by JS -->
-                    </div>
-                </div>
-
-                <!-- Mobile Menu Button -->
-                <div class="-mr-2 flex md:hidden">
-                    <button id="mobile-menu-btn" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-primary hover:bg-gray-100 focus:outline-none">
-                        <i data-lucide="menu" id="menu-icon"></i>
-                    </button>
-                </div>
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-transparent mix-blend-difference md:mix-blend-normal">
+        <div class="max-w-[1200px] mx-auto px-5 py-4 flex items-center justify-between">
+            <a href="#hero" onclick="smoothScrollTo('hero'); return false;" class="flex items-center gap-3 group">
+                <span class="ln-display text-3xl tracking-wide text-[#d4ff00] group-hover:text-white transition-colors">imad</span>
+            </a>
+            <div class="hidden lg:flex items-center gap-8 text-[11px] font-semibold uppercase tracking-[0.2em]">
+                <a href="#about" onclick="smoothScrollTo('about'); return false;" class="hover:text-[#d4ff00] transition-colors">关于</a>
+                <a href="#portfolio" onclick="smoothScrollTo('portfolio'); return false;" class="hover:text-[#d4ff00] transition-colors">作品</a>
+                <a href="#experience" onclick="smoothScrollTo('experience'); return false;" class="hover:text-[#d4ff00] transition-colors">实习</a>
+                <a href="#awards" onclick="smoothScrollTo('awards'); return false;" class="hover:text-[#d4ff00] transition-colors">荣誉</a>
+                <a href="#ip" onclick="smoothScrollTo('ip'); return false;" class="hover:text-[#d4ff00] transition-colors">知识产权</a>
+                <a href="#skills" onclick="smoothScrollTo('skills'); return false;" class="hover:text-[#d4ff00] transition-colors">技能</a>
+                <a href="#contact" onclick="smoothScrollTo('contact'); return false;" class="hover:text-[#d4ff00] transition-colors">联系</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="assets/resume.pdf" target="_blank" class="ln-btn ln-btn-solid hidden sm:inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold uppercase tracking-wider no-underline">简历</a>
+                <button id="mobile-menu-button" type="button" class="lg:hidden w-11 h-11 flex items-center justify-center text-xl" aria-label="菜单"><i class="fas fa-bars"></i></button>
             </div>
         </div>
-
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-100 absolute w-full">
-            <div id="mobile-menu-links" class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <!-- Links injected by JS -->
+        <div id="mobile-menu" class="hidden lg:hidden fixed inset-0 bg-black z-50 pt-24 px-6">
+            <div class="flex flex-col gap-6 text-2xl ln-display tracking-wide">
+                <a href="#about" onclick="toggleMobileMenu();smoothScrollTo('about')" class="border-b border-white/10 pb-4">关于</a>
+                <a href="#portfolio" onclick="toggleMobileMenu();smoothScrollTo('portfolio')" class="border-b border-white/10 pb-4">作品</a>
+                <a href="#experience" onclick="toggleMobileMenu();smoothScrollTo('experience')" class="border-b border-white/10 pb-4">实习</a>
+                <a href="#contact" onclick="toggleMobileMenu();smoothScrollTo('contact')" class="pb-4">联系</a>
+                <a href="assets/resume.pdf" target="_blank" class="ln-btn ln-btn-solid mt-4 block text-center py-4 text-lg font-bold no-underline">下载简历</a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="hero" class="relative min-h-screen flex items-center pt-20">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
-            <div class="max-w-4xl">
-                <p id="hero-role" class="text-sm md:text-base font-medium text-secondary mb-6 tracking-widest uppercase"></p>
-                <h1 id="hero-tagline" class="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-primary leading-[1.1] mb-8"></h1>
-                <p id="hero-bio" class="text-lg md:text-xl text-secondary max-w-2xl leading-relaxed mb-12"></p>
-                
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="#work" class="inline-flex items-center justify-center px-8 py-4 bg-primary text-white text-sm font-semibold rounded-full hover:bg-black transition-all hover:scale-105">
-                        View Work
-                    </a>
-                    <a href="#contact" class="inline-flex items-center justify-center px-8 py-4 bg-gray-100 text-primary text-sm font-semibold rounded-full hover:bg-gray-200 transition-all hover:scale-105">
-                        Contact Me
-                    </a>
+    <section id="hero" class="relative min-h-[100svh] flex flex-col ln-hero-grid overflow-hidden">
+        <div id="hero-tap-layer" tabindex="0" role="button" aria-label="点击关闭提示层"
+             class="absolute inset-0 z-30 flex flex-col items-center justify-end pb-28 md:pb-20 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-auto cursor-pointer transition-opacity duration-500 lg:hidden">
+            <span class="text-[10px] uppercase tracking-[0.4em] text-white/70 border border-white/20 px-4 py-2 rounded-full">轻触继续</span>
+        </div>
+        <div class="flex-1 max-w-[1200px] w-full mx-auto px-5 pt-28 pb-8 grid lg:grid-cols-12 gap-8 lg:gap-4 items-end lg:items-center relative z-10">
+            <div class="lg:col-span-6">
+            <div id="hero-parallax-text-inner" class="flex flex-col justify-center lg:min-h-[70vh] space-y-8">
+                <p class="text-[11px] uppercase tracking-[0.35em] text-[#d4ff00]/90 ln-line-group">
+                    <span class="ln-line ln-line-inline" style="--ln-i:0">浙江大学软件学院 · 信息产品设计 · 保研</span>
+                </p>
+                <div class="ln-line-group">
+                    <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-[1.05]"><span class="ln-line" style="--ln-i:1">王耀颉</span></h1>
+                    <p class="ln-display text-[clamp(4rem,18vw,10rem)] leading-none text-[#d4ff00] mt-2"><span class="ln-line" style="--ln-i:2">imad</span></p>
+                </div>
+                <p class="text-lg sm:text-xl text-white/75 max-w-xl leading-relaxed ln-line-group">
+                    <span class="ln-line" style="--ln-i:3">智能交互设计师 · AI 产品经理</span>
+                    <span class="ln-line text-white/50 text-base" style="--ln-i:4">以代码实现交互逻辑，以设计探索智能体验</span>
+                </p>
+                <div class="flex flex-wrap gap-4 ln-line-group">
+                    <span class="ln-line ln-line-inline" style="--ln-i:5">
+                        <a href="#portfolio" onclick="smoothScrollTo('portfolio'); return false;" class="ln-btn ln-btn-solid inline-flex items-center gap-3 px-8 py-4 font-bold text-sm uppercase tracking-wider no-underline">进入作品</a>
+                    </span>
+                    <span class="ln-line ln-line-inline" style="--ln-i:6">
+                        <a href="assets/resume.pdf" target="_blank" class="ln-btn inline-flex items-center gap-3 px-8 py-4 text-sm font-medium uppercase tracking-wider no-underline">简历 PDF</a>
+                    </span>
+                </div>
+            </div>
+            </div>
+            <div class="lg:col-span-6 relative flex justify-center lg:justify-end">
+                <div class="relative w-full max-w-md lg:max-w-none">
+                    <div class="absolute -inset-4 border border-[#d4ff00]/20 rounded-sm skew-y-1 pointer-events-none hidden lg:block"></div>
+                    <img id="hero-parallax-img" src="本人照片.jpg" alt="王耀颉" width="1200" height="1600" class="relative w-full max-h-[52vh] lg:max-h-[min(78vh,640px)] object-contain object-bottom mx-auto grayscale-[20%] contrast-[1.05]">
                 </div>
             </div>
         </div>
-        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce hidden md:flex flex-col items-center text-secondary">
-            <span class="text-xs mb-2">Scroll</span>
-            <i data-lucide="arrow-down" class="w-5 h-5"></i>
-        </div>
-    </section>
-
-    <!-- Portfolio Section -->
-    <section id="work" class="py-24 bg-surface">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
-                <div>
-                    <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Selected Work</h2>
-                    <p class="text-secondary max-w-md">A collection of projects exploring the intersection of design, technology, and human experience.</p>
-                </div>
-                <!-- Filters -->
-                <div id="portfolio-filters" class="flex flex-wrap gap-2">
-                    <!-- Filters injected by JS -->
-                </div>
-            </div>
-
-            <!-- Grid -->
-            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Projects injected by JS -->
-            </div>
+        <div class="ln-scroll-hint absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 text-[10px] uppercase tracking-[0.45em] text-white/40 pointer-events-none">
+            <span class="w-px h-10 bg-gradient-to-b from-transparent via-[#d4ff00]/60 to-transparent"></span>
+            Scroll
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
-                <div>
-                    <h2 class="text-3xl md:text-4xl font-bold text-primary mb-8">About Me</h2>
-                    <div id="about-text" class="prose prose-lg text-secondary space-y-6">
-                        <!-- About text injected by JS -->
+    <div class="ln-marquee-wrap ln-reveal">
+        <div class="ln-marquee py-3 text-[#d4ff00] ln-display text-xl md:text-2xl tracking-wide whitespace-nowrap">
+            <span class="px-8">DESIGN</span><span class="text-white/30">·</span>
+            <span class="px-8">CODE</span><span class="text-white/30">·</span>
+            <span class="px-8">AI PRODUCT</span><span class="text-white/30">·</span>
+            <span class="px-8">AR / VR</span><span class="text-white/30">·</span>
+            <span class="px-8">HCI</span><span class="text-white/30">·</span>
+            <span class="px-8">DESIGN</span><span class="text-white/30">·</span>
+            <span class="px-8">CODE</span><span class="text-white/30">·</span>
+            <span class="px-8">AI PRODUCT</span><span class="text-white/30">·</span>
+            <span class="px-8">AR / VR</span><span class="text-white/30">·</span>
+            <span class="px-8">HCI</span><span class="text-white/30">·</span>
+        </div>
+    </div>
+
+    <section id="about" class="py-24 md:py-32 bg-[#080808] border-t border-white/5">
+        <div class="max-w-[1200px] mx-auto px-5">
+            <div class="ln-reveal ln-line-group flex flex-col md:flex-row md:items-end gap-4 md:gap-16 mb-16 md:mb-24">
+                <h2 class="ln-display text-[clamp(3rem,12vw,8rem)] leading-[0.9] text-white"><span class="ln-line" style="--ln-i:0">在案上</span></h2>
+                <h2 class="ln-display text-[clamp(3rem,12vw,8rem)] leading-[0.9] text-[#d4ff00]"><span class="ln-line" style="--ln-i:1">在交付</span></h2>
+            </div>
+            <div class="grid md:grid-cols-12 gap-16 ln-reveal">
+                <div class="md:col-span-5">
+                    <p class="text-[11px] uppercase tracking-[0.3em] text-[#d4ff00] mb-6">About</p>
+                    <p class="text-lg text-white/80 leading-relaxed mb-6">中共党员；湖南大学设计艺术学院本科（GPA 3.75，专业排名 4/114，前 3%），保研浙江大学软件学院信息产品设计方向。</p>
+                    <p class="text-white/50 leading-relaxed">专注 AI 赋能的智能产品与交互创新，具备软硬件协同、AR/VR 空间交互、AI Agent 与产品全链路能力。</p>
+                    <div class="mt-12 flex gap-12">
+                        <div><div class="ln-display text-5xl text-[#d4ff00]">3.75</div><div class="text-xs uppercase tracking-widest text-white/40 mt-1">GPA</div></div>
+                        <div><div class="ln-display text-5xl text-white">4/114</div><div class="text-xs uppercase tracking-widest text-white/40 mt-1">排名</div></div>
                     </div>
                 </div>
-                <div class="bg-surface rounded-3xl p-8 md:p-12">
-                    <h3 class="text-2xl font-bold text-primary mb-8">Capabilities</h3>
-                    <div id="skills-container" class="space-y-8">
-                        <!-- Skills injected by JS -->
+                <div class="md:col-span-7 space-y-12">
+                    <div class="border-l-2 border-[#d4ff00]/40 pl-8">
+                        <div class="text-xs text-white/40 uppercase tracking-widest mb-2">2026 —</div>
+                        <div class="text-xl font-semibold">浙江大学软件学院</div>
+                        <div class="text-[#d4ff00] text-sm mt-1">信息产品设计 · 保研</div>
+                    </div>
+                    <div class="border-l-2 border-white/10 pl-8">
+                        <div class="text-xs text-white/40 uppercase tracking-widest mb-2">2022 — 2026</div>
+                        <div class="text-xl font-semibold">湖南大学设计艺术学院</div>
+                        <div class="text-[#d4ff00] text-sm mt-1">数据智能与服务设计</div>
+                        <p class="text-sm text-white/45 mt-3">多门核心课程 90+；编程与交互设计课程名列前茅</p>
+                    </div>
+                    <div class="border-l-2 border-white/10 pl-8">
+                        <div class="text-xs text-white/40 uppercase tracking-widest mb-2">2024 夏</div>
+                        <div class="text-xl font-semibold">德国普福尔茨海姆应用技术大学</div>
+                        <div class="text-[#d4ff00] text-sm mt-1">设计专业 · 公费交流</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <footer id="contact" class="bg-primary text-white py-24">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 mb-20">
-                <div>
-                    <h2 class="text-4xl md:text-5xl font-bold mb-6">Let's work together.</h2>
-                    <p class="text-gray-400 text-lg max-w-md mb-8">Have a project in mind? Reach out and let's create something meaningful.</p>
-                    <a id="contact-email" href="" class="inline-flex items-center text-2xl font-bold border-b-2 border-accent pb-1 hover:text-accent transition-colors"></a>
-                    <div class="mt-8 flex items-center text-gray-400">
-                        <i data-lucide="map-pin" class="w-5 h-5 mr-2"></i>
-                        <span id="contact-location"></span>
-                    </div>
+    <section id="portfolio" class="py-24 md:py-32 bg-[#050505]">
+        <div class="max-w-[1200px] mx-auto px-5">
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12">
+                <div class="ln-line-group">
+                    <p class="text-[11px] uppercase tracking-[0.35em] text-[#d4ff00] mb-4"><span class="ln-line ln-line-inline" style="--ln-i:0">Selected Work</span></p>
+                    <h2 class="ln-display text-6xl md:text-8xl leading-none"><span class="ln-line" style="--ln-i:1">作品集</span></h2>
                 </div>
-                <div class="flex flex-col justify-end">
-                    <div id="social-links" class="flex flex-wrap gap-4">
-                        <!-- Socials injected by JS -->
-                    </div>
-                </div>
+                <button type="button" onclick="showAllProjects()" class="ln-btn text-left text-xs uppercase tracking-[0.25em] text-white/40 border-white/15 self-start lg:self-auto px-4 py-2 hover:!text-black">全部项目 ↗</button>
             </div>
-            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-                <p id="copyright"></p>
+            <p class="text-white/40 text-sm max-w-2xl mb-10 ln-reveal">7 项核心作品（横向滑动浏览 · 点击查看详情）；下方为补充经历。</p>
+            <div id="project-grid" class="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-4 -mx-5 px-5 md:mx-0 md:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"></div>
+            <div class="mt-24 pt-16 border-t border-white/10 ln-reveal">
+                <h3 class="ln-display text-4xl text-white/90 mb-10">More</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="ln-more-card p-6 border border-white/10 hover:border-[#39ff14]/35 bg-[#0c0c0c]">
+                        <div class="text-[10px] uppercase tracking-widest text-white/35 mb-2">研究</div>
+                        <div class="font-semibold text-lg">GenZ-Alpha</div>
+                        <p class="text-sm text-white/45 mt-2">基于抖音的代际行为研究与论文。</p>
+                    </div>
+                    <div class="ln-more-card p-6 border border-white/10 hover:border-[#39ff14]/35 bg-[#0c0c0c]">
+                        <div class="text-[10px] uppercase tracking-widest text-white/35 mb-2">工业</div>
+                        <div class="font-semibold text-lg">三一重工</div>
+                        <p class="text-sm text-white/45 mt-2">新一代 16 吨叉车工业设计。</p>
+                    </div>
+                    <div class="ln-more-card p-6 border border-white/10 hover:border-[#39ff14]/35 bg-[#0c0c0c]">
+                        <div class="text-[10px] uppercase tracking-widest text-white/35 mb-2">科研平台</div>
+                        <div class="font-semibold text-lg">文旅部重点实验室</div>
+                        <p class="text-sm text-white/45 mt-2">数字文化创意智能设计技术科研。</p>
+                    </div>
+                    <div class="ln-more-card p-6 border border-white/10 hover:border-[#39ff14]/35 bg-[#0c0c0c]">
+                        <div class="text-[10px] uppercase tracking-widest text-white/35 mb-2">芒果 TV</div>
+                        <div class="font-semibold text-lg">山海璇玑大模型</div>
+                        <p class="text-sm text-white/45 mt-2">文博场景商业化与产品设计。</p>
+                    </div>
+                    <div class="ln-more-card p-6 border border-white/10 hover:border-[#39ff14]/35 bg-[#0c0c0c] md:col-span-2 lg:col-span-1">
+                        <div class="text-[10px] uppercase tracking-widest text-white/35 mb-2">芒果 TV</div>
+                        <div class="font-semibold text-lg">山海听听</div>
+                        <p class="text-sm text-white/45 mt-2">AI 智慧讲解平台。</p>
+                    </div>
+                </div>
             </div>
         </div>
+    </section>
+
+    <section id="experience" class="py-24 md:py-32 bg-[#080808] border-t border-white/5">
+        <div class="max-w-[900px] mx-auto px-5 ln-reveal">
+            <p class="text-[11px] uppercase tracking-[0.35em] text-[#d4ff00] mb-4">On the desk</p>
+            <h2 class="ln-display text-6xl md:text-7xl mb-16">实习</h2>
+            <div class="space-y-16">
+                <div>
+                    <div class="text-xs uppercase tracking-widest text-white/35 mb-3">2025.11 — 2026.03</div>
+                    <div class="text-2xl font-bold text-[#d4ff00]">芒果 TV（山海）</div>
+                    <div class="text-white/60 mt-1">AI 产品经理</div>
+                    <p class="mt-6 text-white/70 leading-relaxed">主导<strong class="text-white">赛博佛祖</strong> 0→1；负责<strong class="text-white">山海映真</strong> 全版本迭代；参与<strong class="text-white">山海璇玑</strong>、<strong class="text-white">山海听听</strong> 设计与商业化。</p>
+                </div>
+                <div>
+                    <div class="text-xs uppercase tracking-widest text-white/35 mb-3">2024.08 — 2024.09</div>
+                    <div class="text-2xl font-bold text-white">浪潮软件集团</div>
+                    <div class="text-white/60 mt-1">评测实验室 · 实习</div>
+                    <p class="mt-6 text-white/70 leading-relaxed">功能 / 兼容性 / 体验测试与报告输出。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="awards" class="py-24 md:py-32 bg-[#050505]">
+        <div class="max-w-[1200px] mx-auto px-5">
+            <h2 class="ln-display text-6xl md:text-8xl text-center mb-4 ln-reveal">荣誉</h2>
+            <p class="text-center text-white/35 text-sm mb-16 max-w-xl mx-auto ln-reveal">国家级 · 省部级 · 校级</p>
+            <div class="grid md:grid-cols-3 gap-5 ln-reveal">
+                <div class="border border-white/10 p-8 bg-[#0c0c0c]">
+                    <div class="text-[10px] uppercase text-[#d4ff00] tracking-widest mb-4">国家级</div>
+                    <ul class="space-y-4 text-sm text-white/55">
+                        <li>中国高校计算机大赛移动应用创新赛 · 全国三等奖</li>
+                        <li>米兰设计周 · 国二 ×2 / 国三 ×3</li>
+                        <li>G-CROSS · 国铜 ×4</li>
+                        <li>新质点设计奖 · 新质点奖</li>
+                    </ul>
+                </div>
+                <div class="border border-[#d4ff00]/25 p-8 bg-[#0c0c0c]">
+                    <div class="text-[10px] uppercase text-[#d4ff00] tracking-widest mb-4">省部级</div>
+                    <ul class="space-y-4 text-sm text-white/55">
+                        <li>挑战杯 · 湖南省金奖</li>
+                        <li>湖南省创新大赛 · 省一 ×2</li>
+                        <li>米兰设计周 · 湖南省一等奖</li>
+                        <li>移动应用创新赛 · 华中赛区一等奖</li>
+                        <li>NCDA / 数媒赛 · 省三</li>
+                        <li>移动创客马拉松 · 优胜奖</li>
+                    </ul>
+                </div>
+                <div class="border border-white/10 p-8 bg-[#0c0c0c]">
+                    <div class="text-[10px] uppercase text-[#d4ff00] tracking-widest mb-4">校级</div>
+                    <ul class="space-y-4 text-sm text-white/55">
+                        <li>湖南大学一等学业奖学金</li>
+                        <li>湖南大学二等学业奖学金</li>
+                        <li>湖南大学优秀学生干部</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="ip" class="py-24 md:py-32 bg-[#080808]">
+        <div class="max-w-[1200px] mx-auto px-5">
+            <h2 class="ln-display text-6xl md:text-8xl mb-16 ln-reveal">知识产权</h2>
+            <div class="grid md:grid-cols-2 gap-5 ln-reveal text-sm text-white/55">
+                <div class="border border-white/10 p-8">
+                    <h3 class="text-[#d4ff00] text-xs uppercase tracking-widest mb-4">发明专利</h3>
+                    <p>基于 LCSS-拓扑特征融合的滑板动作识别和互动方法<br><span class="text-white/35 text-xs mt-2 block">2025108867126</span></p>
+                </div>
+                <div class="border border-white/10 p-8">
+                    <h3 class="text-[#d4ff00] text-xs uppercase tracking-widest mb-4">外观设计</h3>
+                    <p>酒器套装（儒韵）<br><span class="text-white/35 text-xs mt-2 block">2024305519423</span></p>
+                </div>
+                <div class="border border-white/10 p-8">
+                    <h3 class="text-[#d4ff00] text-xs uppercase tracking-widest mb-4">软著</h3>
+                    <p class="mb-4">智能滑板运动分析与评估系统 · 2025SR0447984</p>
+                    <p>Ansoul 情绪记录与沉浸式体验软件 · 2025SR0129312</p>
+                </div>
+                <div class="border border-white/10 p-8">
+                    <h3 class="text-[#d4ff00] text-xs uppercase tracking-widest mb-4">美术作品</h3>
+                    <p class="space-y-3">
+                        <span class="block">情绪精灵表情系列 · 陕作登字-2024-F-00056913</span>
+                        <span class="block">情绪精灵 logo · 国作登字-2025-F-00003018</span>
+                        <span class="block">For the Street · 国作登字-2025-F-00064825</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="py-24 md:py-32 bg-[#050505] border-t border-white/5">
+        <div class="max-w-[1200px] mx-auto px-5">
+            <h2 class="ln-display text-6xl md:text-8xl text-center mb-16 ln-reveal">技能</h2>
+            <div class="grid md:grid-cols-2 gap-5 ln-reveal">
+                <div class="border border-white/10 p-8 border-t-2 border-t-[#d4ff00]">
+                    <h3 class="font-bold text-lg mb-4">AI 产品设计</h3>
+                    <p class="text-sm text-white/55 leading-relaxed">Figma / Axure / PRD 全链路；SD、Coze、Gemini、通义等 AIGC 工具。</p>
+                </div>
+                <div class="border border-white/10 p-8 border-t-2 border-t-white/30">
+                    <h3 class="font-bold text-lg mb-4">技术开发</h3>
+                    <p class="text-sm text-white/55 leading-relaxed">Python、TypeScript、C#；React / RN / Node；VisionOS、Swift、Blender。</p>
+                </div>
+                <div class="border border-white/10 p-8 border-t-2 border-t-white/30">
+                    <h3 class="font-bold text-lg mb-4">设计创意</h3>
+                    <p class="text-sm text-white/55 leading-relaxed">交互与服务设计、空间交互、Figma / Blender / UE。</p>
+                </div>
+                <div class="border border-white/10 p-8 border-t-2 border-t-white/30">
+                    <h3 class="font-bold text-lg mb-4">用研与数据</h3>
+                    <p class="text-sm text-white/55 leading-relaxed">问卷、访谈、可用性测试；SUS、Pref；数据清洗与量化分析。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-24 md:py-40 bg-[#080808]">
+        <div class="max-w-4xl mx-auto px-5 text-center ln-reveal ln-line-group">
+            <p class="text-[11px] uppercase tracking-[0.4em] text-[#d4ff00] mb-6"><span class="ln-line ln-line-inline" style="--ln-i:0">Contact</span></p>
+            <h2 class="ln-display text-6xl md:text-8xl mb-12"><span class="ln-line" style="--ln-i:1">保持联系</span></h2>
+            <div class="grid sm:grid-cols-2 gap-4 text-left">
+                <a href="tel:15666017675" class="block p-6 border border-white/10 hover:border-[#d4ff00]/50 transition-colors">
+                    <div class="text-[10px] uppercase tracking-widest text-white/35 mb-2">电话</div>
+                    <div class="font-mono text-lg">15666017675</div>
+                </a>
+                <a href="mailto:2132044993@qq.com" class="block p-6 border border-white/10 hover:border-[#d4ff00]/50 transition-colors">
+                    <div class="text-[10px] uppercase tracking-widest text-white/35 mb-2">邮箱</div>
+                    <div class="font-mono text-sm break-all">2132044993@qq.com</div>
+                </a>
+                <div class="p-6 border border-white/10">
+                    <div class="text-[10px] uppercase tracking-widest text-white/35 mb-2">微信</div>
+                    <div class="font-mono">WYJ0408317675</div>
+                </div>
+                <div class="p-6 border border-white/10">
+                    <div class="text-[10px] uppercase tracking-widest text-white/35 mb-2">城市</div>
+                    <div>长沙 · 杭州</div>
+                </div>
+            </div>
+            <p class="mt-12 text-xs text-white/30">中共党员</p>
+        </div>
+    </section>
+
+    <footer class="py-16 border-t border-white/10 bg-black">
+        <div class="max-w-[1200px] mx-auto px-5 flex flex-col md:flex-row justify-between items-center gap-8 text-xs uppercase tracking-widest text-white/35">
+            <span>© 2026 王耀颉 · try 实验页</span>
+            <div class="flex gap-8">
+                <a href="index.html" class="hover:text-[#d4ff00] transition-colors">主站</a>
+                <a href="apple-index.html" class="hover:text-[#d4ff00] transition-colors">Apple 版</a>
+                <a href="#hero" onclick="smoothScrollTo('hero'); return false;" class="hover:text-[#d4ff00] transition-colors">顶部</a>
+            </div>
+        </div>
+        <p class="text-center text-[10px] text-white/20 mt-8 px-6">视觉参考：运动员个人站常见的全屏叙事、荧光点缀与大字标题（如 <a href="https://landonorris.com/" class="underline hover:text-white/40">landonorris.com</a>），非商业复刻。</p>
     </footer>
 
-    <!-- 1. Load Data -->
-    <script src="constants.js"></script>
-    <!-- 2. Load Application Logic -->
-    <script src="script.js"></script>
+    <div id="project-modal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 md:p-6">
+        <div id="modal-backdrop" class="absolute inset-0 bg-black/90 backdrop-blur-sm cursor-pointer" aria-hidden="true"></div>
+        <div id="modal-panel" class="relative z-10 bg-[#0a0a0a] max-w-4xl w-full max-h-[92vh] overflow-hidden border border-white/10 shadow-2xl shadow-[#d4ff00]/5">
+            <div class="flex justify-between items-center border-b border-white/10 px-6 py-4">
+                <div id="modal-project-title" class="text-xl md:text-2xl font-bold tracking-tight pr-4"></div>
+                <button type="button" onclick="closeModal()" class="text-3xl leading-none text-white/40 hover:text-[#d4ff00] transition shrink-0" aria-label="关闭">&times;</button>
+            </div>
+            <div class="p-6 md:p-8 overflow-auto" style="max-height: calc(92vh - 140px)">
+                <div id="modal-content" class="prose prose-invert prose-sm md:prose-base max-w-none"></div>
+            </div>
+            <div class="flex border-t border-white/10">
+                <button type="button" onclick="prevProject()" class="ln-btn flex-1 py-4 text-xs uppercase tracking-widest border-0 border-r border-white/10 rounded-none hover:bg-white/5">← 上一个</button>
+                <button type="button" onclick="nextProject()" class="ln-btn ln-btn-solid flex-1 py-4 text-xs uppercase tracking-widest rounded-none font-bold">下一个 →</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="application/json" id="portfolio-projects">
+[
+  {
+    "id": 1,
+    "title": "For the Street",
+    "subtitle": "基于AI生成和动作检测技术的滑板社交应用",
+    "period": "2024.09 - 2025.01",
+    "role": "项目负责人",
+    "tags": [
+      "AI产品",
+      "交互设计",
+      "硬件设计"
+    ],
+    "image": "https://picsum.photos/id/1015/800/600",
+    "category": "AI产品",
+    "description": "<p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">项目定位</span>：针对滑板用户社交连接难、精彩瞬间难记录、动作复盘不全面的痛点，打造集硬件感知、AI 动作识别、生成式内容创作、社群社交于一体的落地产品，为滑板爱好者打造专属社交名片。</p><div class=\"grid md:grid-cols-2 gap-8 mb-8\"><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">核心工作</h4><ul class=\"space-y-3 text-sm text-gray-300 list-disc pl-5\"><li><strong class=\"text-white\">用户研究</strong>：100+ 线上问卷、20 名板友深度访谈，竞品分析，提炼核心需求</li><li><strong class=\"text-white\">算法研发</strong>：200+ 组真实滑行数据采集与训练；自研 LCSS-拓扑特征融合动作识别，Pivot 等高频动作精准识别</li><li><strong class=\"text-white\">产品开发</strong>：React Native 客户端 + Node.js/Express 后端；「滑行前-中-后」全流程交互；SD+Lora 动态海报约 19 秒生成，内容创作效率提升 96%</li><li><strong class=\"text-white\">硬件设计</strong>：可拆卸抗震结构，MPU6050、HC-05、ATGM336H GPS，运动数据实时采集传输</li><li><strong class=\"text-white\">体验优化</strong>：多轮实验与可用性测试，SUS、Pref 量表驱动交互与海报优化</li></ul></div><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">技术栈</h4><p class=\"text-sm text-gray-400 leading-relaxed\">React Native、Node.js/Express、Python、SD+Lora、MPU6050、LCSS 算法、SQLite</p><h4 class=\"text-[#0EA5E9] font-semibold mb-3 mt-8 text-sm tracking-widest\">项目成果</h4><ul class=\"space-y-2 text-sm text-gray-300 list-disc pl-5\"><li>知识产权：国家发明专利 1 项、软著 1 项、美术作品著作权 1 项</li><li>竞赛：米兰设计周国家级二等奖、G-CROSS 国家级铜奖、湖大数据智能模块专题设计年级最高分</li><li>落地：软硬件协同闭环，用户分享意愿提升约 4.3 倍</li></ul></div></div>"
+  },
+  {
+    "id": 2,
+    "title": "Ansoul",
+    "subtitle": "基于VisionOS的青少年情绪障碍AR协同治疗系统",
+    "period": "2024.03 - 2024.11",
+    "role": "项目负责人",
+    "tags": [
+      "AR/VR",
+      "AI产品",
+      "VisionOS"
+    ],
+    "image": "https://picsum.photos/id/201/800/600",
+    "category": "AR/VR",
+    "description": "<p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">项目定位</span>：专为临床医生设计，基于 VisionOS 的青少年情绪障碍 AR 协同治疗系统，将沙盘疗法与 AR 空间交互、AI Agent 结合，降低诊疗防备心理，辅助可视化、可量化心理诊疗。</p><div class=\"grid md:grid-cols-2 gap-8\"><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">核心工作</h4><ul class=\"space-y-3 text-sm text-gray-300 list-disc pl-5\"><li><strong class=\"text-white\">临床调研</strong>：走访湖大心理咨询室、长沙市三医院，患者与医生深度访谈</li><li><strong class=\"text-white\">系统设计</strong>：「诊疗前-中-后」全流程；IP 化身 AI Agent，行为感知、大模型分析、诊疗引导与医生辅助决策</li><li><strong class=\"text-white\">开发落地</strong>：Figma、Blender 建模，Swift + Reality Composer Pro 开发 VisionOS 应用；AR 交互、AI 生成三维模型、诊疗数据记录分析</li></ul></div><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">技术栈</h4><p class=\"text-sm text-gray-400\">VisionOS、Swift、Reality Composer Pro、Blender、Figma、大语言模型、AI Agent</p><h4 class=\"text-[#0EA5E9] font-semibold mb-3 mt-8 text-sm tracking-widest\">项目成果</h4><ul class=\"space-y-2 text-sm text-gray-300 list-disc pl-5\"><li>软著 1 项、美术作品著作权 2 项</li><li>中国高校计算机大赛-移动应用创新赛 全国三等奖、华中赛区一等奖</li><li>全流程开发完成，筹备 VisionOS 应用商店上架</li></ul></div></div>"
+  },
+  {
+    "id": 3,
+    "title": "中远海运 - 船用装卸臂智能对接系统交互平台",
+    "subtitle": "融合机器视觉与数字孪生的智能对接平台",
+    "period": "2024.12 - 2025.09",
+    "role": "项目负责人",
+    "tags": [
+      "工业设计",
+      "AI产品",
+      "数字孪生"
+    ],
+    "image": "https://picsum.photos/id/180/800/600",
+    "category": "工业设计",
+    "description": "<p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">项目定位</span>：响应港口智能化升级，针对传统装卸对接信息杂乱、人工效率低、安全风险高，打造融合机器视觉与数字孪生的智能对接平台，实现船岸装卸全流程智能化。</p><div class=\"grid md:grid-cols-2 gap-8\"><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">核心工作</h4><ul class=\"space-y-3 text-sm text-gray-300 list-disc pl-5\"><li><strong class=\"text-white\">需求调研</strong>：8 场需求会、15 名一线作业人员深访，拆解对接与极端天气等全场景需求</li><li><strong class=\"text-white\">产品设计</strong>：「操作员-调度员-管理端」三层架构，完整方案与交互原型，对齐 QT 开发标准</li><li><strong class=\"text-white\">体验优化</strong>：10+ 轮用户测试，优化操作路径与功能适配</li></ul></div><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">项目成果</h4><p class=\"text-emerald-400 font-medium mb-4\">系统正式交付：装卸效率提升约 75%，人力成本降低约 50%，安全事故率下降约 90%</p><p class=\"text-sm text-gray-300\">入选 2025 中远海运官方年度十大「智见」AI 场景。</p></div></div>"
+  },
+  {
+    "id": 4,
+    "title": "AstroFit",
+    "subtitle": "基于微重力环境的太空健身外骨骼系统",
+    "period": "2024.09 - 2024.12",
+    "role": "项目核心成员",
+    "tags": [
+      "产品设计",
+      "太空健康",
+      "硬件"
+    ],
+    "image": "https://picsum.photos/id/967/800/600",
+    "category": "产品设计",
+    "description": "<p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">项目定位</span>：针对太空微重力下肌肉萎缩、骨量丢失、心肺功能下降，设计可折叠太空健身外骨骼，模拟地球重力负荷，提供定制化抗萎缩训练。</p><p class=\"text-sm text-gray-300 mb-6\"><strong class=\"text-white\">核心工作</strong>：太空舱空间分析、肌群锻炼需求拆解，外骨骼机械结构与交互系统，完整产品服务体系；多类型训练动作适配、运动数据实时监测、AI 定制训练计划。</p><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">项目成果</h4><p class=\"text-sm text-gray-300\">米兰设计周国家级三等奖、湖南省一等奖、G-CROSS 国家级铜奖。</p></div>"
+  },
+  {
+    "id": 5,
+    "title": "Zoom In",
+    "subtitle": "以个人审视为主题的创意双人互动装置",
+    "period": "2024.03 - 2024.06",
+    "role": "项目核心成员",
+    "tags": [
+      "互动装置",
+      "生成式设计",
+      "AIGC"
+    ],
+    "image": "https://picsum.photos/id/48/800/600",
+    "category": "互动艺术",
+    "description": "<p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">项目定位</span>：以自我审视为核心，通过互动装置与生成式设计，引导参与者从自我与他人双重视角探索自我，缓解外界眼光带来的焦虑与自我怀疑。</p><p class=\"text-sm text-gray-300 mb-6\"><strong class=\"text-white\">核心工作</strong>：完整互动体验流程，视觉设计与创意编程；基于问答数据的个性化认知海报 AI 生成，多风格海报体系。</p><p class=\"text-sm text-gray-300\"><strong class=\"text-[#0EA5E9]\">成果</strong>：G-CROSS 跨界艺术创意奖国家级铜奖。</p>"
+  },
+  {
+    "id": 6,
+    "title": "赛博佛祖",
+    "subtitle": "佛教文化数字化互动产品",
+    "period": "2025.11 - 2026.03",
+    "role": "项目主导人",
+    "tags": [
+      "AI产品",
+      "文化科技",
+      "0到1落地"
+    ],
+    "image": "https://picsum.photos/id/292/800/600",
+    "category": "AI产品",
+    "description": "<p class=\"text-gray-400 text-sm mb-2\">芒果 TV（山海）</p><p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">项目定位</span>：佛教文化数字化互动产品，AI 问答、抽签解签等核心功能，0→1 演示版落地，支撑后续商业化投放。</p><div class=\"grid md:grid-cols-2 gap-8\"><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">核心工作</h4><ul class=\"space-y-3 text-sm text-gray-300 list-disc pl-5\"><li>市场调研与竞品分析，PRD 撰写，跨部门协同推进</li><li>搭建佛教知识库；Python + FFmpeg 视频合成工作流</li><li>参与 TTS 与大模型选型，优化数字人交互，保障达标上线</li></ul></div><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">技术栈</h4><p class=\"text-sm text-gray-400\">Python、FFmpeg、通义千问 plus、商汤 Seko、即梦 AI、可灵 AI</p></div></div>"
+  },
+  {
+    "id": 7,
+    "title": "山海映真小程序",
+    "subtitle": "V1.0 / V2.0 产品迭代",
+    "period": "2025.11 - 2026.03",
+    "role": "核心产品负责人",
+    "tags": [
+      "小程序",
+      "AR",
+      "文创"
+    ],
+    "image": "https://picsum.photos/id/106/800/600",
+    "category": "产品迭代",
+    "description": "<p class=\"text-gray-400 text-sm mb-2\">芒果 TV（山海）</p><p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">项目定位</span>：整合 AI 生成、实体打印、AR 互动的文创小程序；配合芒果跨年晚会落地与版本迭代，形成完整产品链路。</p><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">核心工作</h4><ul class=\"space-y-3 text-sm text-gray-300 list-disc pl-5\"><li><strong class=\"text-white\">V1.0</strong>：跨年晚会功能落地，193 笔有效订单，转化率 5.63%</li><li><strong class=\"text-white\">V2.0</strong>：基于用户数据升级，补齐 AR 扫文物活化，形成「AI 生成 - 实体打印 - AR 互动」闭环</li></ul></div>"
+  }
+]
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+    <script src="try-script.js"></script>
 </body>
 </html>
