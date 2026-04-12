@@ -1,176 +1,352 @@
-// Main Application Logic
-// This script runs after constants.js, so it has access to PROFILE, PROJECTS, etc.
+/**
+ * try.html：Lenis 平滑滚动、首屏视差、逐行入场、作品集与弹窗。
+ */
+let currentProjectIndex = 0;
+let filteredProjects = [];
+let projects = [];
+let modalCloseTimer = null;
+/** @type {import("lenis").default | null} */
+let lenis = null;
 
-document.addEventListener('DOMContentLoaded', () => {
-    initApp();
-});
+const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
 
-function initApp() {
-    renderNavbar();
-    renderHero();
-    renderPortfolio();
-    renderAbout();
-    renderContact();
-    
-    // Initialize Icons
-    lucide.createIcons();
-
-    // Scroll Effect for Navbar
-    window.addEventListener('scroll', () => {
-        const nav = document.getElementById('navbar');
-        if (window.scrollY > 20) {
-            nav.classList.add('bg-white/90', 'backdrop-blur-md', 'shadow-sm', 'border-b', 'border-gray-100');
-            nav.classList.remove('bg-transparent');
-        } else {
-            nav.classList.remove('bg-white/90', 'backdrop-blur-md', 'shadow-sm', 'border-b', 'border-gray-100');
-            nav.classList.add('bg-transparent');
-        }
-    });
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-function renderNavbar() {
-    document.getElementById('nav-logo').textContent = PROFILE.name.toUpperCase();
-    
-    const linksContainer = document.getElementById('desktop-menu');
-    const mobileLinksContainer = document.getElementById('mobile-menu-links');
-    
-    NAV_LINKS.forEach(link => {
-        // Desktop
-        const a = document.createElement('a');
-        a.href = link.href;
-        a.textContent = link.label;
-        a.className = "text-sm font-medium text-secondary hover:text-primary transition-colors";
-        linksContainer.appendChild(a);
-
-        // Mobile
-        const ma = document.createElement('a');
-        ma.href = link.href;
-        ma.textContent = link.label;
-        ma.className = "block px-3 py-4 rounded-md text-base font-medium text-primary hover:bg-gray-50 text-center";
-        ma.addEventListener('click', () => {
-             document.getElementById('mobile-menu').classList.add('hidden');
-        });
-        mobileLinksContainer.appendChild(ma);
-    });
-
-    // Mobile Menu Toggle
-    const btn = document.getElementById('mobile-menu-btn');
-    const menu = document.getElementById('mobile-menu');
-    btn.addEventListener('click', () => {
-        menu.classList.toggle('hidden');
-    });
+function getProjects() {
+  const el = document.getElementById("portfolio-projects");
+  if (!el) return [];
+  try {
+    const data = JSON.parse(el.textContent);
+    return Array.isArray(data) ? data : [];
+  } catch (e) {
+    console.error("portfolio-projects JSON:", e);
+    return [];
+  }
 }
 
-function renderHero() {
-    document.getElementById('hero-role').textContent = PROFILE.role;
-    document.getElementById('hero-tagline').textContent = PROFILE.tagline;
-    document.getElementById('hero-bio').textContent = PROFILE.bio;
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
-function renderPortfolio() {
-    const grid = document.getElementById('projects-grid');
-    const filterContainer = document.getElementById('portfolio-filters');
-    const categories = ['All', ...new Set(PROJECTS.map(p => p.category))];
-    let activeCategory = 'All';
+function escapeAttr(s) {
+  return escapeHtml(s).replace(/'/g, "&#39;");
+}
 
-    // Render Filters
-    categories.forEach(cat => {
-        const btn = document.createElement('button');
-        btn.textContent = cat;
-        btn.className = `px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${cat === activeCategory ? 'bg-primary text-white shadow-lg' : 'bg-white text-secondary hover:bg-gray-100'}`;
-        
-        btn.addEventListener('click', () => {
-            activeCategory = cat;
-            // Update buttons style
-            Array.from(filterContainer.children).forEach(b => {
-                if (b.textContent === activeCategory) {
-                    b.className = 'px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 bg-primary text-white shadow-lg';
-                } else {
-                    b.className = 'px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 bg-white text-secondary hover:bg-gray-100';
-                }
-            });
-            renderProjects(activeCategory);
-        });
-        filterContainer.appendChild(btn);
+function remapProjectDescription(html) {
+  return String(html || "")
+    .replace(/text-\[#0EA5E9\]/g, "ln-accent-text")
+    .replace(/#0EA5E9/g, "#d4ff00");
+}
+
+function updateHeroParallax() {
+  if (prefersReducedMotion()) return;
+  const img = document.getElementById("hero-parallax-img");
+  const inner = document.getElementById("hero-parallax-text-inner");
+  if (!img || !inner) return;
+  const y = lenis ? lenis.scroll : window.scrollY;
+  img.style.transform = `translate3d(0, ${-0.5 * y}px, 0)`;
+  inner.style.transform = `translate3d(0, ${0.3 * y}px, 0)`;
+}
+
+function handleNavbarScroll() {
+  const y = lenis ? lenis.scroll : window.scrollY;
+  const nav = document.getElementById("navbar");
+  if (nav) nav.classList.toggle("nav-scrolled", y > 40);
+}
+
+function initLenis() {
+  if (prefersReducedMotion() || typeof window.Lenis === "undefined") {
+    window.addEventListener("scroll", () => {
+      handleNavbarScroll();
+      updateHeroParallax();
     });
+    updateHeroParallax();
+    return;
+  }
+  lenis = new window.Lenis({
+    duration: 1.2,
+    easing: easeOutCubic,
+    wheelMultiplier: 1.2,
+    touchMultiplier: 1.15,
+    smoothWheel: true,
+  });
+  document.documentElement.classList.add("lenis", "lenis-smooth");
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+  lenis.on("scroll", () => {
+    handleNavbarScroll();
+    updateHeroParallax();
+  });
+  updateHeroParallax();
+}
 
-    // Render Projects Function
-    function renderProjects(category) {
-        grid.innerHTML = '';
-        const filtered = category === 'All' ? PROJECTS : PROJECTS.filter(p => p.category === category);
-        
-        if (filtered.length === 0) {
-            grid.innerHTML = '<div class="col-span-full text-center py-20 text-secondary">No projects found in this category.</div>';
-            return;
-        }
-
-        filtered.forEach(project => {
-            const card = document.createElement('a');
-            card.href = project.link || '#';
-            card.className = "group block h-full project-card";
-            card.innerHTML = `
-                <div class="relative overflow-hidden rounded-2xl bg-white shadow-sm hover:shadow-xl transition-all duration-500 h-full flex flex-col">
-                    <div class="aspect-[4/3] overflow-hidden bg-gray-200">
-                        <img src="${project.imageUrl}" alt="${project.title}" loading="lazy" class="project-image w-full h-full object-cover transition-transform duration-700">
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col relative">
-                        <div class="flex justify-between items-start mb-2">
-                            <div>
-                                <span class="text-xs font-semibold tracking-wider text-accent uppercase mb-2 block">${project.category}</span>
-                                <h3 class="text-xl font-bold text-primary group-hover:text-accent transition-colors">${project.title}</h3>
-                            </div>
-                            <div class="arrow-icon bg-primary text-white p-2 rounded-full opacity-0 transform translate-y-4 transition-all duration-300">
-                                <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
-                            </div>
-                        </div>
-                        <p class="text-sm text-secondary leading-relaxed mt-2">${project.description}</p>
-                    </div>
+function renderProjects(projectList) {
+  const container = document.getElementById("project-grid");
+  if (!container) return;
+  container.innerHTML = "";
+  projectList.forEach((project, i) => {
+    const n = String(i + 1).padStart(2, "0");
+    const tags = (project.tags || [])
+      .map(
+        (t) =>
+          `<span class="text-[10px] uppercase tracking-wider px-3 py-1 bg-white/5 text-[#d4ff00] rounded-full border border-white/10">${escapeHtml(t)}</span>`
+      )
+      .join("");
+    container.innerHTML += `
+            <div onclick="openProjectModal(${project.id})" class="ln-card project-card group shrink-0 w-[min(100%,340px)] md:w-auto md:shrink snap-center cursor-pointer border border-white/15 bg-[#0c0c0c] overflow-hidden">
+                <div class="h-52 bg-zinc-900 relative overflow-hidden">
+                    <img src="${escapeAttr(project.image)}" alt="${escapeAttr(project.title)}" class="ln-card-img w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
+                    <span class="ln-display absolute bottom-3 left-3 text-5xl text-white/20 group-hover:text-[#d4ff00]/40 transition-colors duration-[400ms]">${n}</span>
+                    <div class="absolute top-3 right-3 px-3 py-1 bg-black/60 text-[10px] uppercase tracking-widest rounded-full border border-white/10">${escapeHtml(project.period)}</div>
                 </div>
-            `;
-            grid.appendChild(card);
-        });
-        lucide.createIcons(); // Refresh icons for new elements
-    }
-
-    // Initial Render
-    renderProjects('All');
+                <div class="p-6">
+                    <div class="flex flex-wrap gap-2 mb-3">${tags}</div>
+                    <h3 class="text-xl font-semibold tracking-tight group-hover:text-[#d4ff00] transition-colors duration-[400ms]">${escapeHtml(project.title)}</h3>
+                    <p class="text-gray-500 text-sm mt-2 line-clamp-2">${escapeHtml(project.subtitle)}</p>
+                    <div class="mt-5 text-[11px] uppercase tracking-widest text-gray-600"><span class="px-3 py-1 border border-white/15 rounded-full">${escapeHtml(project.role)}</span></div>
+                </div>
+            </div>`;
+  });
 }
 
-function renderAbout() {
-    const textContainer = document.getElementById('about-text');
-    textContainer.innerHTML = `
-        <p>I'm a ${PROFILE.role} based in ${PROFILE.location}. ${PROFILE.bio}</p>
-        <p>Currently, I am ${PROFILE.availability.toLowerCase()}. I'm always excited to collaborate with individuals and companies who share a passion for creating exceptional digital experiences.</p>
-        <p>When I'm not designing, you can find me exploring new coffee shops, hiking in nature, or experimenting with new technologies.</p>
-    `;
-
-    const skillsContainer = document.getElementById('skills-container');
-    SKILLS.forEach(group => {
-        const div = document.createElement('div');
-        div.innerHTML = `
-            <h4 class="text-sm font-bold text-accent uppercase tracking-wider mb-4">${group.category}</h4>
-            <div class="flex flex-wrap gap-3">
-                ${group.items.map(item => `<span class="px-4 py-2 bg-white text-primary text-sm font-medium rounded-lg shadow-sm border border-gray-100">${item}</span>`).join('')}
+function openProjectModal(id) {
+  const list = getProjects();
+  const project = list.find((p) => p.id === id);
+  if (!project) return;
+  if (lenis) lenis.stop();
+  projects = list;
+  currentProjectIndex = projects.findIndex((p) => p.id === id);
+  filteredProjects = [...projects];
+  document.getElementById("modal-project-title").textContent = project.title;
+  const tagSpans = (project.tags || [])
+    .map(
+      (t) =>
+        `<span class="text-[10px] uppercase tracking-wider px-4 py-2 bg-white/10 rounded-full border border-white/10">${escapeHtml(t)}</span>`
+    )
+    .join("");
+  document.getElementById("modal-content").innerHTML = `
+        <div class="mb-8">
+            <img src="${escapeAttr(project.image)}" alt="${escapeAttr(project.title)}" class="w-full rounded-xl mb-8 shadow-2xl border border-white/10">
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+                <div class="text-sm text-gray-500 uppercase tracking-widest">${escapeHtml(project.period)} \u00b7 ${escapeHtml(project.role)}</div>
+                <div class="flex flex-wrap gap-2">${tagSpans}</div>
             </div>
-        `;
-        skillsContainer.appendChild(div);
-    });
+        </div>
+        ${remapProjectDescription(project.description)}`;
+  const modal = document.getElementById("project-modal");
+  const panel = document.getElementById("modal-panel");
+  const wasHidden = modal.classList.contains("hidden");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+  if (wasHidden) {
+    panel.classList.remove("modal-panel-open");
+    modal.classList.remove("modal-open");
+    void panel.offsetWidth;
+    const runEnter = () => {
+      modal.classList.add("modal-open");
+      panel.classList.add("modal-panel-open");
+    };
+    if (prefersReducedMotion()) runEnter();
+    else requestAnimationFrame(runEnter);
+  }
+  document.body.style.overflow = "hidden";
 }
 
-function renderContact() {
-    document.getElementById('contact-email').href = `mailto:${PROFILE.email}`;
-    document.getElementById('contact-email').textContent = PROFILE.email;
-    document.getElementById('contact-location').textContent = PROFILE.location;
-    document.getElementById('copyright').innerHTML = `&copy; ${new Date().getFullYear()} ${PROFILE.name}. All rights reserved.`;
-
-    const socialContainer = document.getElementById('social-links');
-    SOCIAL_LINKS.forEach(link => {
-        const a = document.createElement('a');
-        a.href = link.url;
-        a.target = "_blank";
-        a.rel = "noopener noreferrer";
-        a.className = "w-14 h-14 bg-white/10 rounded-full flex items-center justify-center hover:bg-accent hover:text-white transition-all duration-300";
-        a.innerHTML = `<i data-lucide="${link.icon}" class="w-6 h-6"></i>`;
-        socialContainer.appendChild(a);
-    });
+function closeModal() {
+  const modal = document.getElementById("project-modal");
+  const panel = document.getElementById("modal-panel");
+  if (modal.classList.contains("hidden")) return;
+  modal.classList.remove("modal-open");
+  panel.classList.remove("modal-panel-open");
+  clearTimeout(modalCloseTimer);
+  const delay = prefersReducedMotion() ? 0 : 280;
+  modalCloseTimer = setTimeout(() => {
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+    document.body.style.overflow = "";
+    if (lenis) lenis.start();
+    modalCloseTimer = null;
+  }, delay);
 }
+
+function prevProject() {
+  if (!filteredProjects.length) return;
+  currentProjectIndex = (currentProjectIndex - 1 + filteredProjects.length) % filteredProjects.length;
+  openProjectModal(filteredProjects[currentProjectIndex].id);
+}
+
+function nextProject() {
+  if (!filteredProjects.length) return;
+  currentProjectIndex = (currentProjectIndex + 1) % filteredProjects.length;
+  openProjectModal(filteredProjects[currentProjectIndex].id);
+}
+
+function showAllProjects() {
+  projects = getProjects();
+  filteredProjects = [...projects];
+  renderProjects(projects);
+  const el = document.getElementById("portfolio");
+  if (!el) return;
+  if (lenis) {
+    lenis.scrollTo(el, { offset: -72, duration: 1.2, easing: easeOutCubic });
+  } else {
+    el.scrollIntoView({ behavior: "smooth" });
+  }
+}
+
+function smoothScrollTo(sectionId) {
+  const el = document.getElementById(sectionId);
+  if (!el) return;
+  if (lenis) {
+    lenis.scrollTo(el, { offset: -72, duration: 1.2, easing: easeOutCubic });
+  } else {
+    const y = el.getBoundingClientRect().top + window.scrollY - 72;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  }
+}
+
+function toggleMobileMenu() {
+  const menu = document.getElementById("mobile-menu");
+  const icon = document.getElementById("mobile-menu-button").querySelector("i");
+  if (menu.classList.contains("hidden")) {
+    menu.classList.remove("hidden");
+    icon.classList.replace("fa-bars", "fa-times");
+  } else {
+    menu.classList.add("hidden");
+    icon.classList.replace("fa-times", "fa-bars");
+  }
+}
+
+/** 逐行入场：.ln-line-group 内 .ln-line */
+function initLnLineGroups() {
+  const groups = document.querySelectorAll(".ln-line-group");
+  if (!groups.length) return;
+  if (prefersReducedMotion()) {
+    groups.forEach((g) => {
+      g.querySelectorAll(".ln-line").forEach((l) => l.classList.add("ln-line-visible"));
+    });
+    return;
+  }
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.querySelectorAll(".ln-line").forEach((line) => line.classList.add("ln-line-visible"));
+          obs.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.12, rootMargin: "0px 0px -6% 0px" }
+  );
+  groups.forEach((g) => obs.observe(g));
+}
+
+function initLnReveal() {
+  if (prefersReducedMotion()) {
+    document.querySelectorAll(".ln-reveal").forEach((el) => {
+      el.classList.add("ln-reveal-on");
+    });
+    return;
+  }
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("ln-reveal-on");
+          obs.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.12, rootMargin: "0px 0px -5% 0px" }
+  );
+  document.querySelectorAll(".ln-reveal").forEach((el) => obs.observe(el));
+}
+
+function initSkillBars() {
+  document.querySelectorAll(".skill-bar-wrap").forEach((wrap) => {
+    const fill = wrap.querySelector(".skill-bar-fill");
+    if (!fill) return;
+    const raw = parseInt(wrap.getAttribute("data-skill-pct") || "0", 10);
+    const pct = Math.min(100, Math.max(0, Number.isFinite(raw) ? raw : 0));
+    const applyWidth = () => {
+      fill.style.width = `${pct}%`;
+    };
+    if (prefersReducedMotion()) {
+      applyWidth();
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            applyWidth();
+            io.unobserve(wrap);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    io.observe(wrap);
+  });
+}
+
+function initKeyboardShortcuts() {
+  document.addEventListener("keydown", (e) => {
+    const m = document.getElementById("project-modal");
+    if (m.classList.contains("hidden")) return;
+    if (e.key === "Escape") closeModal();
+    if (e.key === "ArrowRight") nextProject();
+    if (e.key === "ArrowLeft") prevProject();
+  });
+}
+
+function initHeroTapHint() {
+  const layer = document.getElementById("hero-tap-layer");
+  if (!layer) return;
+  const dismiss = () => {
+    layer.classList.add("opacity-0", "pointer-events-none");
+    setTimeout(() => layer.remove(), 600);
+  };
+  layer.addEventListener("click", dismiss, { once: true });
+  layer.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      dismiss();
+    }
+  });
+}
+
+function initialize() {
+  initLenis();
+  initLnLineGroups();
+  initLnReveal();
+  projects = getProjects();
+  filteredProjects = [...projects];
+  renderProjects(projects);
+  document.getElementById("mobile-menu-button").addEventListener("click", toggleMobileMenu);
+  initSkillBars();
+  initKeyboardShortcuts();
+  initHeroTapHint();
+  document.getElementById("project-modal").addEventListener("click", (e) => {
+    if (e.target.id === "modal-backdrop") closeModal();
+  });
+}
+
+window.addEventListener("load", initialize);
+window.smoothScrollTo = smoothScrollTo;
+window.openProjectModal = openProjectModal;
+window.closeModal = closeModal;
+window.prevProject = prevProject;
+window.nextProject = nextProject;
+window.showAllProjects = showAllProjects;
+window.toggleMobileMenu = toggleMobileMenu;
