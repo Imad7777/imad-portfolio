@@ -3,29 +3,279 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>王耀颉 (imad) · TRY — 智能交互 &amp; AI 产品</title>
+    <title>王耀颉 (imad) portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.css">
     <style>
+        /*
+         * 全页颜色入口：只改 :root 内变量即可统一换肤。
+         * 主色：--ln-lime、--ln-hover-lime + --ln-accent-rgb、--ln-hover-rgb（须与 hex 同色相匹配）。
+         * 分区配色：默认青柠；**#project-journey** 橙 + 浅纸感底；**#honors-ip** 青绿 + 天蓝；**#contact** 深底 + **全站青柠**。
+         * 脚本 try-script.js 注入的 class 已使用 var(--ln-lime) / rgba(var(--ln-accent-rgb),…)。
+         */
         :root {
+            /* ===== 主视觉：改主题时改 --ln-lime / --ln-hover-lime，并同步改 RGB 三元组 ===== */
             --ln-lime: #d4ff00;
             --ln-hover-lime: #39ff14;
-            --ln-bg: #050505;
+            --ln-accent-rgb: 212, 255, 0;
+            --ln-hover-rgb: 57, 255, 20;
+            --ln-lime-muted: rgba(var(--ln-accent-rgb), 0.78);
+            --ln-lime-subtle: rgba(var(--ln-accent-rgb), 0.45);
+
+            /* ===== 背景层次 ===== */
+            --ln-bg: #0b0b0f;
+            --ln-bg-deep: #070709;
+            --ln-bg-raised: #101014;
+            --ln-bg-card: #121218;
+            --ln-bg-mid: #0a0a0e;
+            --ln-bg-mid2: #0c0c0c;
+            --ln-bg-mid3: #0c0c10;
+            --ln-bg-mid4: #0e0e12;
+            --ln-bg-modal: #0a0a0a;
+
+            /* ===== 白 + 透明度（描边 / 字 / 高光）===== */
+            --ln-white-52: rgba(255, 255, 255, 0.52);
+            --ln-text-secondary: var(--ln-white-52);
+            --ln-text-tertiary: var(--ln-white-40);
+            --ln-border-soft: var(--ln-white-08);
+            --ln-white-03: rgba(255, 255, 255, 0.03);
+            --ln-white-04: rgba(255, 255, 255, 0.04);
+            --ln-white-06: rgba(255, 255, 255, 0.06);
+            --ln-white-08: rgba(255, 255, 255, 0.08);
+            --ln-white-10: rgba(255, 255, 255, 0.1);
+            --ln-white-12: rgba(255, 255, 255, 0.12);
+            --ln-white-14: rgba(255, 255, 255, 0.14);
+            --ln-white-18: rgba(255, 255, 255, 0.18);
+            --ln-white-22: rgba(255, 255, 255, 0.22);
+            --ln-white-26: rgba(255, 255, 255, 0.26);
+            --ln-white-28: rgba(255, 255, 255, 0.28);
+            --ln-white-30: rgba(255, 255, 255, 0.3);
+            --ln-white-35: rgba(255, 255, 255, 0.35);
+            --ln-white-40: rgba(255, 255, 255, 0.4);
+            --ln-white-42: rgba(255, 255, 255, 0.42);
+            --ln-white-48: rgba(255, 255, 255, 0.48);
+            --ln-white-58: rgba(255, 255, 255, 0.58);
+            --ln-white-92: rgba(255, 255, 255, 0.92);
+            --ln-white-94: rgba(255, 255, 255, 0.94);
+            --ln-white-035: rgba(255, 255, 255, 0.035);
+            --ln-border-btn: rgba(255, 255, 255, 0.28);
+
+            /* ===== 黑 + 阴影 / 蒙层 ===== */
+            --ln-black-35: rgba(0, 0, 0, 0.35);
+            --ln-black-40: rgba(0, 0, 0, 0.4);
+            --ln-black-42: rgba(0, 0, 0, 0.42);
+            --ln-black-45: rgba(0, 0, 0, 0.45);
+            --ln-black-55: rgba(0, 0, 0, 0.55);
+            --ln-black-58: rgba(0, 0, 0, 0.58);
+            --ln-black-60: rgba(0, 0, 0, 0.6);
+            --ln-black-65: rgba(0, 0, 0, 0.65);
+            --ln-black-72: rgba(0, 0, 0, 0.72);
+            --ln-black-85: rgba(0, 0, 0, 0.85);
+            --ln-black-88: rgba(0, 0, 0, 0.88);
+            --ln-black-90: rgba(0, 0, 0, 0.9);
+            --ln-black-92: rgba(0, 0, 0, 0.92);
+            --ln-nav-bg-scrolled: rgba(11, 11, 15, 0.9);
+            --ln-cursor-bg: rgba(5, 5, 5, 0.15);
+            --ln-black-08: rgba(0, 0, 0, 0.08);
+
+            /* ===== 荣誉玻璃卡等深色半透明底 ===== */
+            --ln-glass-18-24-48: rgba(18, 18, 24, 0.48);
+            --ln-glass-12-16-40: rgba(12, 12, 16, 0.4);
+            --ln-glass-7-9-46: rgba(7, 7, 9, 0.46);
+            --ln-glass-22-30-56: rgba(22, 22, 30, 0.56);
+            --ln-glass-14-18-48: rgba(14, 14, 18, 0.48);
+            --ln-glass-8-11-52: rgba(8, 8, 11, 0.52);
+            --ln-glass-6-10-32: rgba(6, 6, 10, 0.32);
+            --ln-glass-6-10-34: rgba(6, 6, 10, 0.34);
+            --ln-glass-16-18-92: rgba(16, 16, 18, 0.92);
+            --ln-glass-8-8-75: rgba(8, 8, 8, 0.75);
+
+            /* 纯黑白（按钮反色等） */
+            --ln-white-solid: #fff;
+            --ln-black-solid: #000;
+            --ln-mask-opaque: #000;
+
             --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
             --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
         }
+
+        /* 实习·项目区块：橙色系（与全站青柠区分） */
+        #project-journey {
+            --ln-lime: #ff7810;
+            --ln-hover-lime: #ffa64d;
+            --ln-accent-rgb: 255, 120, 16;
+            --ln-hover-rgb: 255, 166, 77;
+            /* 小字 eyebrow：暗底上不用低不透明度纯橙，改高明度暖色保证可读 */
+            --ln-lime-muted: rgba(255, 214, 186, 0.92);
+            --ln-lime-subtle: rgba(255, 190, 150, 0.72);
+        }
+        /* 橙区脚本卡片：副文案 / 英文标签用高明度暖白主读，橙色保留在标题与 tag 上 */
+        /* 仅深色底实习区；浅色纸感区见下方 #project-journey.ln-section-paper */
+        #project-journey:not(.ln-section-paper) .text-gray-500 {
+            color: rgba(255, 230, 216, 0.88) !important;
+        }
+        #project-journey:not(.ln-section-paper) .text-gray-600 {
+            color: rgba(255, 218, 200, 0.8) !important;
+        }
+        #project-journey:not(.ln-section-paper) .text-white\/40 {
+            color: rgba(255, 236, 224, 0.84) !important;
+        }
+        #project-journey:not(.ln-section-paper) .text-white\/35 {
+            color: rgba(255, 230, 216, 0.8) !important;
+        }
+        #project-journey:not(.ln-section-paper) .text-white\/30 {
+            color: rgba(255, 222, 206, 0.76) !important;
+        }
+        #project-journey:not(.ln-section-paper) .text-white\/20 {
+            color: rgba(255, 210, 192, 0.68) !important;
+        }
+        #project-journey:not(.ln-section-paper) .text-white\/\[0\.52\] {
+            color: rgba(255, 234, 222, 0.9) !important;
+        }
+        #project-journey:not(.ln-section-paper) .text-white\/55 {
+            color: rgba(255, 232, 218, 0.9) !important;
+        }
+        #project-journey:not(.ln-section-paper) .text-white\/60 {
+            color: rgba(255, 228, 212, 0.88) !important;
+        }
+        #project-journey:not(.ln-section-paper) .text-white\/70 {
+            color: rgba(255, 238, 226, 0.92) !important;
+        }
+
+        /* 实习 featured 四卡：脚本生成 .ln-exp-card--light-paper（白/浅灰卡，见 try-script.js） */
+        #project-journey.ln-section-paper .ln-exp-card--light-paper:hover {
+            border-color: rgba(var(--ln-accent-rgb), 0.42) !important;
+            box-shadow: 0 14px 36px -18px rgba(15, 23, 42, 0.14);
+        }
+        #project-journey.ln-section-paper .ln-career-group__head {
+            border-color: rgba(15, 23, 42, 0.12) !important;
+        }
+        #project-journey.ln-section-paper .ln-career-group__head .text-white\/35 {
+            color: rgba(71, 85, 105, 0.88) !important;
+        }
+        #project-journey.ln-section-paper .ln-career-group__head .text-white\/60 {
+            color: rgba(51, 65, 85, 0.9) !important;
+        }
+        #project-journey.ln-section-paper .ln-career-group__head .text-white\/70 {
+            color: rgba(30, 41, 59, 0.92) !important;
+        }
+        #project-journey.ln-section-paper .ln-career-zrow__body .ln-career-zrow__num {
+            color: #0f172a !important;
+        }
+        #project-journey.ln-section-paper .ln-career-zrow__body .text-white {
+            color: #0f172a !important;
+        }
+        #project-journey.ln-section-paper .ln-career-zrow__body .text-white\/35 {
+            color: rgba(71, 85, 105, 0.88) !important;
+        }
+        #project-journey.ln-section-paper .ln-career-zrow__body .text-white\/30 {
+            color: rgba(100, 116, 139, 0.85) !important;
+        }
+        #project-journey.ln-section-paper .ln-career-zrow__body .text-white\/20 {
+            color: rgba(148, 163, 184, 0.9) !important;
+        }
+        #project-journey.ln-section-paper .ln-career-zrow__body .text-white\/55 {
+            color: rgba(51, 65, 85, 0.92) !important;
+        }
+        #project-journey.ln-section-paper .ln-career-zrow__body .text-white\/70 {
+            color: rgba(30, 41, 59, 0.9) !important;
+        }
+        #project-journey.ln-section-paper .group:hover .ln-career-zrow__body h3.text-white {
+            color: var(--ln-lime) !important;
+        }
+
+        /* 荣誉·知产：青绿主色 + 天蓝 hover（联系区用全站青柠，不与此共用） */
+        #honors-ip {
+            --ln-lime: #2dd4bf;
+            --ln-hover-lime: #38bdf8;
+            --ln-accent-rgb: 45, 212, 191;
+            --ln-hover-rgb: 56, 189, 248;
+            --ln-lime-muted: rgba(165, 243, 252, 0.88);
+            --ln-lime-subtle: rgba(103, 232, 249, 0.55);
+        }
+
+        /* 浅色纸感带：实习·项目等（联系区已恢复深底） */
+        .ln-section-paper {
+            background: linear-gradient(180deg, #fafbfc 0%, #f0f2f5 55%, #eceff3 100%);
+            color: #0f172a;
+            border-top-color: rgba(15, 23, 42, 0.08) !important;
+        }
+        .ln-section-paper .text-white {
+            color: #0f172a !important;
+        }
+        .ln-section-paper .text-white\/80 {
+            color: rgba(15, 23, 42, 0.88) !important;
+        }
+        .ln-section-paper .text-white\/52 {
+            color: rgba(51, 65, 85, 0.92) !important;
+        }
+        .ln-section-paper .text-white\/48 {
+            color: rgba(71, 85, 105, 0.9) !important;
+        }
+        .ln-section-paper .border-white\/10 {
+            border-color: rgba(15, 23, 42, 0.1) !important;
+        }
+        .ln-section-paper .ln-surface-card {
+            background: #ffffff;
+            color: #0f172a;
+            box-shadow: 0 1px 0 rgba(15, 23, 42, 0.06);
+        }
+        .ln-section-paper .ln-surface-card:hover {
+            box-shadow: 0 18px 40px -22px rgba(15, 23, 42, 0.18);
+        }
         .ln-body {
             font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
-            background: var(--ln-bg);
+            color-scheme: dark;
+            background-color: var(--ln-bg);
+            background-image:
+                radial-gradient(ellipse 120% 80% at 50% -20%, rgba(var(--ln-accent-rgb), 0.045), transparent 50%),
+                radial-gradient(ellipse 70% 50% at 100% 40%, var(--ln-white-03), transparent 45%),
+                linear-gradient(180deg, var(--ln-bg) 0%, var(--ln-bg-mid) 55%, var(--ln-bg-deep) 100%);
+        }
+        /* 章节竖向节奏：大段上下留白一致 */
+        .ln-section-major {
+            padding-block: clamp(5.25rem, 11vw, 8.75rem);
+        }
+        .ln-section-portfolio {
+            padding-top: clamp(7rem, 14vw, 11rem);
+            padding-bottom: clamp(6rem, 10vw, 8.5rem);
+        }
+        .ln-reading {
+            max-width: 42rem;
+        }
+        .ln-bg-deep {
+            background-color: var(--ln-bg-deep);
+        }
+        .ln-bg-raised {
+            background-color: var(--ln-bg-raised);
+        }
+        /* 区块标签：略收饱和，小字不用满亮荧光 */
+        .ln-eyebrow {
+            font-size: 11px;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--ln-lime-muted);
+        }
+        /* 键盘焦点：与品牌色一致 */
+        a:focus-visible,
+        button:focus-visible,
+        [role="button"]:focus-visible,
+        .ln-btn:focus-visible,
+        #hero-tap-layer:focus-visible {
+            outline: 2px solid var(--ln-lime);
+            outline-offset: 3px;
+        }
+        .ln-hi-carousel__btn:focus-visible {
+            outline-offset: 4px;
         }
         .ln-display { font-family: "Bebas Neue", Oswald, sans-serif; }
         .ln-accent-text { color: var(--ln-lime) !important; }
         .nav-scrolled {
-            background: rgba(5, 5, 5, 0.92) !important;
+            background: var(--ln-nav-bg-scrolled) !important;
             backdrop-filter: blur(14px);
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+            border-bottom: 1px solid var(--ln-border-soft);
         }
         .ln-reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.9s cubic-bezier(0.23,1,0.32,1), transform 0.9s cubic-bezier(0.23,1,0.32,1); }
         .ln-reveal-on { opacity: 1; transform: none; }
@@ -42,8 +292,8 @@
         /* 按钮 hover：透明底 → 荧光青柠，字白 → 黑，0.3s easeOutQuart */
         .ln-btn {
             background-color: transparent;
-            color: #fff;
-            border: 1px solid rgba(255,255,255,0.28);
+            color: var(--ln-white-solid);
+            border: 1px solid var(--ln-border-btn);
             transition:
                 background-color 0.3s var(--ease-out-quart),
                 color 0.3s var(--ease-out-quart),
@@ -52,42 +302,46 @@
         }
         .ln-btn:hover {
             background-color: var(--ln-hover-lime);
-            color: #000;
+            color: var(--ln-black-solid);
             border-color: var(--ln-hover-lime);
         }
         .ln-btn-solid {
             background-color: var(--ln-lime);
-            color: #000;
+            color: var(--ln-black-solid);
             border: 1px solid var(--ln-lime);
         }
         .ln-btn-solid:hover {
             background-color: var(--ln-hover-lime);
             border-color: var(--ln-hover-lime);
-            color: #000;
+            color: var(--ln-black-solid);
         }
         /* 首屏视差层：位移跟随后 0.1s 延迟（transition-delay） */
-        #hero-parallax-img,
-        #hero-parallax-text-inner {
-            will-change: transform;
-            transition: transform 0.5s var(--ease-out-quart);
-            transition-delay: 0.1s;
+        /* 全宽跑马灯：轨道须明显宽于视口，否则右侧会露底；4 段相同内容 + translateX(-25%) 无缝循环 */
+        .ln-marquee-wrap {
+            overflow: hidden;
+            border-block: 1px solid var(--ln-border-soft);
+            background: var(--ln-bg-raised);
+            width: 100%;
+            max-width: 100%;
         }
-        html.lenis-smooth .ln-parallax-disabled #hero-parallax-img,
-        html.lenis-smooth .ln-parallax-disabled #hero-parallax-text-inner { transition: none; }
-        .ln-marquee-wrap { overflow: hidden; border-block: 1px solid rgba(255,255,255,0.08); background: #080808; }
         .ln-marquee {
-            display: flex; width: max-content; animation: ln-marquee 28s linear infinite;
+            display: flex;
+            width: max-content;
+            flex-shrink: 0;
+            animation: ln-marquee 32s linear infinite;
         }
         @keyframes ln-marquee {
-            to { transform: translateX(-50%); }
+            to { transform: translateX(-25%); }
         }
         @media (prefers-reduced-motion: reduce) {
             .ln-marquee { animation: none; }
             .ln-reveal { opacity: 1; transform: none; transition: none; }
             .ln-line { opacity: 1; transform: none; transition: none; }
-            #hero-parallax-img, #hero-parallax-text-inner { transition: none; }
-            .ln-card, .ln-card-img, .ln-more-card { transition: none; }
-            .ln-card:hover, .ln-more-card:hover { transform: none; }
+            .ln-major-motion { opacity: 1 !important; transform: none !important; filter: none !important; }
+            #hero-parallax-img-wrap, #hero-parallax-text-inner, #hero-parallax-img { transition: none; }
+            .ln-marquee--reverse .ln-marquee { animation: none; }
+            .ln-card, .ln-card-img, .ln-more-card, .ln-surface-card { transition: none; }
+            .ln-card:hover, .ln-more-card:hover, .ln-surface-card:hover { transform: none; box-shadow: none !important; }
         }
         /* 卡片 hover：整体 1.02，图 1.05，0.4s */
         .ln-card {
@@ -97,15 +351,33 @@
         .ln-card-img {
             transition: transform 0.4s var(--ease-out-quart);
         }
-        .ln-card:hover .ln-card-img { transform: scale(1.05); }
+        /* 主效果：卡整体；辅效果：图略推近，避免与卡缩放叠成「双弹跳」 */
+        .ln-card:hover .ln-card-img { transform: scale(1.03); }
         .ln-more-card {
             transition: transform 0.4s var(--ease-out-quart), border-color 0.4s var(--ease-out-quart);
         }
         .ln-more-card:hover { transform: scale(1.02); }
+        /* 与作品集卡片统一的悬浮：整块微抬升 + 边框高亮（用于荣誉/专利/技能/联系/实习等） */
+        .ln-surface-card {
+            transition: transform 0.4s var(--ease-out-quart), border-color 0.4s var(--ease-out-quart), box-shadow 0.4s var(--ease-out-quart);
+        }
+        .ln-surface-card:hover {
+            transform: scale(1.02);
+            border-color: rgba(var(--ln-hover-rgb), 0.38) !important;
+            box-shadow: 0 20px 50px -20px var(--ln-black-65);
+        }
+        /* 荣誉 / 专利 / 技能 / 联系 / 实习：卡片分层入场（GSAP + perspective） */
+        .ln-deep-lift {
+            perspective: 1100px;
+        }
+        .ln-deep-lift .ln-surface-card {
+            transform-style: preserve-3d;
+            will-change: transform, opacity;
+        }
         .ln-hero-grid {
             background:
-                radial-gradient(ellipse 80% 60% at 70% 20%, rgba(212, 255, 0, 0.06), transparent 55%),
-                linear-gradient(180deg, #050505 0%, #0a0a0a 100%);
+                radial-gradient(ellipse 80% 60% at 70% 20%, rgba(var(--ln-accent-rgb), 0.055), transparent 55%),
+                linear-gradient(180deg, var(--ln-bg-deep) 0%, var(--ln-bg) 100%);
         }
         #project-modal.flex:not(.modal-open) { opacity: 0; }
         #project-modal.modal-open { animation: modalBackdropIn 0.28s ease both; }
@@ -123,35 +395,982 @@
         .ln-scroll-hint { animation: ln-bounce 2.2s ease-in-out infinite; }
         @keyframes ln-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
         @media (prefers-reduced-motion: reduce) { .ln-scroll-hint { animation: none; } }
+        /* 顶部滚动进度条 */
+        #ln-scroll-progress {
+            position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 70;
+            pointer-events: none; transform-origin: left center;
+            background: linear-gradient(90deg, var(--ln-lime), var(--ln-hover-lime));
+            box-shadow: 0 0 20px rgba(var(--ln-accent-rgb), 0.35);
+            transform: scaleX(0);
+        }
+        /* 视差层在 wrapper 上（内层图片单独做入场缩放） */
+        #hero-parallax-img-wrap,
+        #hero-parallax-text-inner {
+            will-change: transform;
+            transition: transform 0.5s var(--ease-out-quart);
+            transition-delay: 0.1s;
+        }
+        html.lenis-smooth .ln-parallax-disabled #hero-parallax-img-wrap,
+        html.lenis-smooth .ln-parallax-disabled #hero-parallax-text-inner { transition: none; }
+        #hero-parallax-img {
+            transition: opacity 1s var(--ease-out-expo), transform 1.1s var(--ease-out-expo);
+        }
+        #hero-parallax-img.ln-hero-img-enter { opacity: 0; transform: scale(1.08); }
+        #hero-parallax-img.ln-hero-img-ready { opacity: 1; transform: scale(1); }
+        @media (prefers-reduced-motion: reduce) {
+            #hero-parallax-img { transition: none; }
+            #hero-parallax-img.ln-hero-img-enter { opacity: 1; transform: none; }
+        }
+        .ln-magnetic {
+            transition: transform 0.45s var(--ease-out-expo);
+        }
+        /* 桌面自定义光标：细线圆角方框 + 青柠微光，与深色底/荧光点缀统一（无 mix-blend 反色圆点） */
+        .ln-cursor {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 28px;
+            height: 28px;
+            margin: 0;
+            pointer-events: none;
+            z-index: 9999;
+            border: 1px solid var(--ln-white-22);
+            border-radius: 5px;
+            background: var(--ln-cursor-bg);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            box-shadow:
+                0 0 0 1px rgba(var(--ln-accent-rgb), 0.06),
+                0 0 28px rgba(var(--ln-accent-rgb), 0.08);
+            transition:
+                width 0.28s var(--ease-out-expo),
+                height 0.28s var(--ease-out-expo),
+                border-color 0.22s var(--ease-out-quart),
+                border-radius 0.22s var(--ease-out-quart),
+                box-shadow 0.28s var(--ease-out-expo),
+                background 0.22s ease;
+        }
+        html.ln-cursor-on.ln-cursor-hover .ln-cursor {
+            width: 36px;
+            height: 36px;
+            border-color: rgba(var(--ln-accent-rgb), 0.55);
+            border-radius: 7px;
+            background: rgba(var(--ln-accent-rgb), 0.04);
+            box-shadow:
+                0 0 0 1px rgba(var(--ln-accent-rgb), 0.2),
+                0 0 40px rgba(var(--ln-accent-rgb), 0.14);
+        }
+        @media (min-width: 1024px) and (pointer: fine) {
+            html.ln-cursor-on body { cursor: none; }
+        }
+        @media (max-width: 1023px), (pointer: coarse) {
+            .ln-cursor { display: none !important; }
+        }
+        /* 荣誉区巨型描边字：z 在背景之上、轮播之下；top 略低以免贴顶 */
+        .ln-honors-wrap {
+            position: absolute;
+            left: 50%;
+            top: clamp(6.75rem, 17vh, 10rem);
+            transform: translate(-50%, -28%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .ln-honors-bg {
+            font-family: "Bebas Neue", Oswald, sans-serif;
+            font-size: clamp(5.5rem, 22vw, 17rem);
+            line-height: 1;
+            color: transparent;
+            -webkit-text-stroke: 4px rgba(var(--ln-accent-rgb), 0.2);
+            white-space: nowrap;
+            user-select: none;
+        }
+        #honors-ip .ln-honors-head-wrap {
+            position: relative;
+            z-index: 50;
+            border-bottom: 1px solid var(--ln-white-06);
+            padding-bottom: clamp(1.5rem, 3.5vw, 2.25rem);
+            margin-bottom: 0.5rem;
+        }
+        /* 第二行跑马灯反向 */
+        .ln-marquee--reverse .ln-marquee {
+            animation-name: ln-marquee-rev;
+        }
+        @keyframes ln-marquee-rev {
+            from { transform: translateX(-25%); }
+            to { transform: translateX(0); }
+        }
+        .ln-clip-title { will-change: clip-path; }
+        @media (prefers-reduced-motion: reduce) {
+            .ln-clip-title { clip-path: none !important; }
+            #ln-scroll-progress { display: none; }
+        }
+        /* 全宽横向 breakout（作品集滚动带 / 可复用） */
+        .ln-full-bleed-x {
+            width: 100vw;
+            margin-left: calc(50% - 50vw);
+            margin-right: calc(50% - 50vw);
+        }
+        /* 作品集：pin 全屏视口 + GSAP x 横移（与 Lenis 同步）；降级时视口内原生横滑 */
+        .ln-port-pin-sticky {
+            height: 100vh;
+            height: 100dvh;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            background: var(--ln-bg-deep);
+        }
+        .ln-port-viewport {
+            width: 100%;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+            touch-action: pan-y pinch-zoom;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+        .ln-port--native-scroll .ln-port-viewport {
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            touch-action: auto;
+        }
+        .ln-port-track {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: center;
+            gap: clamp(2.25rem, 5.5vw, 5rem);
+            width: max-content;
+            max-width: none;
+            min-height: min(880px, 94vh);
+            padding: 3.25rem clamp(1.25rem, 4vw, 3rem) 4.25rem;
+            padding-right: max(2rem, min(18vw, 12rem));
+            overflow: visible;
+            will-change: transform;
+        }
+        .ln-port--native-scroll .ln-port-track {
+            scroll-snap-type: x proximity;
+            will-change: auto;
+        }
+        .ln-port-slot {
+            flex-shrink: 0;
+            scroll-snap-align: center;
+            transform-origin: center center;
+        }
+        .ln-port-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .ln-port-caption {
+            letter-spacing: 0.18em;
+        }
+        @media (max-width: 1023px) {
+            .ln-port-track {
+                min-height: min(640px, 85vh);
+                gap: 1.5rem;
+                padding-top: 1.75rem;
+                padding-bottom: 2.5rem;
+                padding-right: 2.5rem;
+            }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .ln-port-slot { transform: none !important; }
+            .ln-port-viewport {
+                overflow-x: auto;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
+                touch-action: auto;
+            }
+            .ln-port-track { will-change: auto; }
+        }
+        /* 荣誉·知产：轮播视口（约 3～5 张可见），中间放大，左右按钮；证书占位在卡片顶部 */
+        .ln-fan-hi-outer {
+            padding-block: 72px 96px;
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+        }
+        .ln-hi-parallax-shell {
+            position: relative;
+            width: 100%;
+            max-width: 1280px;
+            margin-inline: auto;
+            will-change: transform;
+        }
+        .ln-hi-carousel {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: stretch;
+            gap: 0.35rem;
+            padding-inline: clamp(0.25rem, 2vw, 1rem);
+        }
+        @media (min-width: 768px) {
+            .ln-hi-carousel { gap: 0.5rem; align-items: center; }
+        }
+        .ln-hi-carousel__btn {
+            flex-shrink: 0;
+            align-self: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--ln-white-18);
+            background: var(--ln-glass-8-8-75);
+            color: var(--ln-lime);
+            font-size: 14px;
+            cursor: pointer;
+            transition: border-color 0.25s var(--ease-out-quart), background 0.25s ease, color 0.2s ease, opacity 0.2s ease;
+            z-index: 30;
+        }
+        .ln-hi-carousel__btn:hover:not(:disabled) {
+            border-color: rgba(var(--ln-accent-rgb), 0.45);
+            background: rgba(var(--ln-accent-rgb), 0.08);
+            color: var(--ln-hover-lime);
+        }
+        .ln-hi-carousel__btn:disabled {
+            opacity: 0.28;
+            cursor: not-allowed;
+        }
+        .ln-hi-carousel__viewport {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            padding: 1.5rem 0 2rem;
+            min-height: min(560px, 82vh);
+            mask-image: linear-gradient(90deg, transparent 0%, var(--ln-mask-opaque) 4%, var(--ln-mask-opaque) 96%, transparent 100%);
+            -webkit-mask-image: linear-gradient(90deg, transparent 0%, var(--ln-mask-opaque) 4%, var(--ln-mask-opaque) 96%, transparent 100%);
+        }
+        @media (max-width: 767px) {
+            .ln-hi-carousel__viewport {
+                min-height: auto;
+                mask-image: none;
+                -webkit-mask-image: none;
+            }
+        }
+        #honors-ip-track.ln-hi-carousel__track {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: flex-end;
+            gap: 20px;
+            width: max-content;
+            transform: translateX(0);
+            transition: transform 0.55s cubic-bezier(0.33, 1, 0.68, 1);
+            will-change: transform;
+        }
+        .ln-hi-slide {
+            flex: 0 0 auto;
+            width: clamp(220px, 24vw, 280px);
+            transform-origin: 50% 80%;
+            transition: transform 0.55s cubic-bezier(0.33, 1, 0.68, 1), opacity 0.42s cubic-bezier(0.33, 1, 0.68, 1), filter 0.42s ease;
+        }
+        @media (max-width: 767px) {
+            .ln-hi-slide {
+                width: min(100%, 320px);
+            }
+        }
+        .ln-hi-slide.is-active {
+            z-index: 10;
+        }
+        #honors-ip .ln-hi-slide {
+            cursor: pointer;
+        }
+        /* 荣誉轮播：指示点 */
+        .ln-hi-dots {
+            flex-basis: 100%;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 1rem;
+            padding: 0 1rem 0.25rem;
+        }
+        .ln-hi-dots[hidden] {
+            display: none !important;
+        }
+        .ln-hi-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 9999px;
+            border: 1px solid var(--ln-border-btn);
+            background: transparent;
+            padding: 0;
+            cursor: pointer;
+            transition:
+                background 0.25s var(--ease-out-quart),
+                border-color 0.25s var(--ease-out-quart),
+                transform 0.25s var(--ease-out-quart),
+                box-shadow 0.25s ease;
+        }
+        .ln-hi-dot:hover {
+            border-color: rgba(var(--ln-accent-rgb), 0.45);
+            background: rgba(var(--ln-accent-rgb), 0.12);
+        }
+        .ln-hi-dot.is-active {
+            background: var(--ln-lime);
+            border-color: var(--ln-lime);
+            box-shadow: 0 0 14px rgba(var(--ln-accent-rgb), 0.28);
+            transform: scale(1.15);
+        }
+        .ln-hi-dot:focus-visible {
+            outline: 2px solid var(--ln-lime);
+            outline-offset: 3px;
+        }
+        /* 荣誉卡 · 竞赛 / 奖学金（档案列表） */
+        .ln-hi-awards-plate {
+            margin: 1rem 1rem 0;
+            border-radius: 0.65rem;
+            border: 1px solid var(--ln-white-14);
+            background: linear-gradient(165deg, rgba(var(--ln-accent-rgb), 0.09), var(--ln-glass-6-10-32));
+            -webkit-backdrop-filter: blur(12px) saturate(1.1);
+            backdrop-filter: blur(12px) saturate(1.1);
+            min-height: 5.25rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.2rem;
+            flex-shrink: 0;
+        }
+        .ln-hi-awards-plate i {
+            color: var(--ln-lime-muted);
+            font-size: 1.2rem;
+        }
+        .ln-hi-awards-plate__label {
+            font-size: 10px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--ln-white-48);
+        }
+        .ln-hi-awards-plate__hint {
+            font-size: 9px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--ln-white-26);
+        }
+        .ln-hi-card__category {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--ln-lime-muted);
+            line-height: 1.3;
+        }
+        .ln-hi-awards-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        .ln-hi-awards-list__item {
+            position: relative;
+            padding-left: 0.65rem;
+            margin: 0;
+            font-size: 0.8125rem;
+            line-height: 1.58;
+            color: var(--ln-white-58);
+            border-left: 2px solid rgba(var(--ln-accent-rgb), 0.24);
+        }
+        /* 荣誉卡 · 知识产权（铭牌 + 登记信息） */
+        .ln-hi-ip-plate {
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            margin: 1rem 1rem 0;
+            border-radius: 0.65rem;
+            overflow: hidden;
+            border: 1px solid var(--ln-white-14);
+            background: var(--ln-glass-6-10-34);
+            -webkit-backdrop-filter: blur(12px) saturate(1.08);
+            backdrop-filter: blur(12px) saturate(1.08);
+            flex-shrink: 0;
+            min-height: 4.5rem;
+        }
+        .ln-hi-ip-plate__rail {
+            width: 4px;
+            flex-shrink: 0;
+            background: linear-gradient(180deg, rgba(var(--ln-accent-rgb), 0.65), rgba(var(--ln-accent-rgb), 0.15));
+        }
+        .ln-hi-ip-plate__inner {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0.6rem 0.85rem;
+            gap: 0.12rem;
+        }
+        .ln-hi-ip-plate__kind {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--ln-lime-muted);
+        }
+        .ln-hi-ip-plate__meta {
+            font-size: 9px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ln-white-30);
+        }
+        .ln-hi-ip-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--ln-white-92);
+            line-height: 1.48;
+        }
+        .ln-hi-ip-no {
+            font-family: ui-monospace, "Cascadia Mono", monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+            color: var(--ln-white-48);
+            margin-top: 0.85rem;
+        }
+        .ln-hi-ip-block + .ln-hi-ip-block {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--ln-white-06);
+        }
+        .ln-hi-ip-block__name {
+            font-size: 0.8125rem;
+            line-height: 1.5;
+            color: var(--ln-white-58);
+        }
+        .ln-hi-ip-block__no {
+            font-family: ui-monospace, "Cascadia Mono", monospace;
+            font-size: 0.65rem;
+            color: var(--ln-white-42);
+            margin-top: 0.4rem;
+            letter-spacing: 0.04em;
+        }
+        .ln-footer-sig {
+            border-top: 1px solid var(--ln-border-soft);
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            text-align: center;
+        }
+        .ln-footer-sig__mark {
+            font-family: ui-monospace, monospace;
+            font-size: 10px;
+            letter-spacing: 0.32em;
+            text-transform: uppercase;
+            color: var(--ln-lime-muted);
+        }
+        .ln-footer-sig__name {
+            font-size: 10px;
+            color: var(--ln-text-tertiary);
+            margin-top: 0.5rem;
+            letter-spacing: 0.12em;
+        }
+        .ln-hi-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 420px;
+            max-height: min(560px, 78vh);
+            border-radius: 1.5rem;
+            /* 玻璃拟态：半透明 + 背景模糊，背后 HONORS 描边可透出 */
+            background: linear-gradient(
+                168deg,
+                var(--ln-glass-18-24-48) 0%,
+                var(--ln-glass-12-16-40) 52%,
+                var(--ln-glass-7-9-46) 100%
+            );
+            -webkit-backdrop-filter: blur(20px) saturate(1.12);
+            backdrop-filter: blur(20px) saturate(1.12);
+            box-shadow:
+                0 24px 50px -22px var(--ln-black-58),
+                inset 0 1px 0 var(--ln-white-08);
+            transition:
+                box-shadow 0.4s var(--ease-out-quart),
+                background 0.4s var(--ease-out-quart);
+            overflow: hidden;
+        }
+        #honors-ip article.ln-hi-card.ln-charge-border {
+            border-color: var(--ln-white-14);
+        }
+        .ln-hi-slide.is-active .ln-hi-card {
+            background: linear-gradient(
+                168deg,
+                var(--ln-glass-22-30-56) 0%,
+                var(--ln-glass-14-18-48) 52%,
+                var(--ln-glass-8-11-52) 100%
+            );
+            box-shadow:
+                0 32px 64px -24px var(--ln-black-72),
+                0 0 48px -20px rgba(var(--ln-accent-rgb), 0.1),
+                inset 0 1px 0 var(--ln-white-10);
+        }
+
+        /*
+         * 荣誉·知产：此前「半透明 + backdrop-filter 模糊」会让笔画压在折射层上，主观发糊；
+         * 改为实色卡面、去掉毛玻璃，并整体抬高字色不透明度。
+         */
+        #honors-ip article.ln-hi-card {
+            text-rendering: optimizeLegibility;
+        }
+        #honors-ip .ln-hi-card {
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+            background: linear-gradient(168deg, #17181e 0%, #121318 52%, #0e0f13 100%);
+        }
+        #honors-ip .ln-hi-slide.is-active .ln-hi-card {
+            background: linear-gradient(168deg, #1e1f26 0%, #16171d 52%, #111218 100%);
+            box-shadow:
+                0 28px 56px -22px rgba(0, 0, 0, 0.78),
+                0 0 40px -18px rgba(var(--ln-accent-rgb), 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        }
+        #honors-ip .ln-hi-awards-plate,
+        #honors-ip .ln-hi-ip-plate {
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+        }
+        #honors-ip .ln-hi-awards-plate {
+            background: linear-gradient(165deg, rgba(var(--ln-accent-rgb), 0.1), #15161c);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        #honors-ip .ln-hi-ip-plate {
+            background: #13141a;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        #honors-ip .ln-hi-awards-list__item {
+            color: rgba(255, 255, 255, 0.93);
+            font-weight: 500;
+        }
+        #honors-ip .ln-hi-ip-title {
+            color: #ffffff;
+        }
+        #honors-ip .ln-hi-ip-no {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        #honors-ip .ln-hi-ip-block__name {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        #honors-ip .ln-hi-ip-block__no {
+            color: rgba(255, 255, 255, 0.76);
+        }
+        #honors-ip .ln-hi-ip-plate__meta {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        #honors-ip .ln-hi-awards-plate__label {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        #honors-ip .ln-hi-awards-plate__hint {
+            color: rgba(255, 255, 255, 0.66);
+        }
+        #honors-ip .ln-hi-card__category {
+            color: rgba(255, 255, 255, 0.92);
+        }
+        #honors-ip .ln-hi-ip-plate__kind {
+            color: rgba(var(--ln-accent-rgb), 1);
+        }
+        #honors-ip .ln-hi-awards-plate i {
+            color: rgba(var(--ln-accent-rgb), 0.72);
+        }
+        #honors-ip .ln-hi-cert {
+            color: rgba(255, 255, 255, 0.78);
+            border-color: rgba(255, 255, 255, 0.28);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.25));
+        }
+        #honors-ip .ln-hi-cert i {
+            color: rgba(var(--ln-accent-rgb), 0.55);
+        }
+
+        .ln-hi-cert {
+            aspect-ratio: 4 / 3;
+            max-height: 11rem;
+            flex-shrink: 0;
+            margin: 1rem 1rem 0;
+            border-radius: 0.75rem;
+            border: 1px dashed var(--ln-white-14);
+            background: linear-gradient(145deg, var(--ln-white-04), var(--ln-black-35));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+            color: var(--ln-border-btn);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+        .ln-hi-cert i {
+            font-size: 1.35rem;
+            color: rgba(var(--ln-accent-rgb), 0.25);
+        }
+        .ln-hi-card__scroll {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .ln-hi-card__scroll::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+            display: none;
+        }
+        .ln-hi-card.ln-hi-card--ip {
+            min-height: 400px;
+            max-height: min(520px, 74vh);
+        }
+        @media (prefers-reduced-transparency: reduce) {
+            #honors-ip .ln-hi-card {
+                -webkit-backdrop-filter: none;
+                backdrop-filter: none;
+                background: linear-gradient(168deg, #181920 0%, #13141a 55%, #0f1015 100%);
+            }
+            #honors-ip .ln-hi-slide.is-active .ln-hi-card {
+                background: linear-gradient(168deg, #1f2026 0%, #18191f 55%, #121318 100%);
+            }
+            #honors-ip .ln-hi-awards-plate {
+                background: linear-gradient(165deg, rgba(var(--ln-accent-rgb), 0.09), #16171d);
+            }
+            #honors-ip .ln-hi-ip-plate {
+                background: #14151b;
+            }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            #honors-ip-track.ln-hi-carousel__track,
+            .ln-hi-slide {
+                transition: none !important;
+            }
+            .ln-hi-parallax-shell { transform: none !important; will-change: auto; }
+        }
+        /* 实习：时间轴 */
+        .ln-exp-timeline {
+            position: relative;
+            padding-left: 1.75rem;
+        }
+        @media (min-width: 768px) {
+            .ln-exp-timeline { padding-left: 2.25rem; }
+        }
+        .ln-exp-timeline__rail {
+            position: absolute;
+            left: 0.35rem;
+            top: 0.5rem;
+            bottom: 0.5rem;
+            width: 1px;
+            background: linear-gradient(180deg, rgba(var(--ln-accent-rgb),0.45), var(--ln-white-12) 45%, var(--ln-white-06));
+        }
+        @media (min-width: 768px) {
+            .ln-exp-timeline__rail { left: 0.5rem; }
+        }
+        .ln-timeline-node {
+            position: relative;
+            padding-bottom: 2.5rem;
+            padding-left: 0.5rem;
+            outline: none;
+        }
+        .ln-timeline-node:last-child { padding-bottom: 0; }
+        .ln-timeline-node__dot {
+            position: absolute;
+            left: -1.2rem;
+            top: 0.35rem;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--ln-lime);
+            box-shadow: 0 0 0 4px var(--ln-bg-raised);
+        }
+        @media (min-width: 768px) {
+            .ln-timeline-node__dot { left: -1.55rem; }
+        }
+        .ln-timeline-glow {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.5s var(--ease-out-expo), opacity 0.4s var(--ease-out-quart);
+        }
+        .ln-timeline-node:hover .ln-timeline-glow,
+        .ln-timeline-node:focus-visible .ln-timeline-glow {
+            max-height: 5rem;
+            opacity: 1;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .ln-timeline-glow {
+                max-height: none;
+                opacity: 1;
+                margin-top: 0.75rem;
+            }
+        }
+        /* 专利 & 技能：hover 青柠流光描边（纯 CSS） */
+        .ln-charge-border {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+        }
+        .ln-charge-border::after {
+            content: "";
+            pointer-events: none;
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            opacity: 0;
+            background: linear-gradient(
+                105deg,
+                transparent 0%,
+                transparent 38%,
+                rgba(var(--ln-accent-rgb), 0.14) 50%,
+                transparent 62%,
+                transparent 100%
+            );
+            background-size: 220% 100%;
+            transition: opacity 0.35s var(--ease-out-quart);
+        }
+        .ln-charge-border:hover {
+            border-color: rgba(var(--ln-accent-rgb), 0.32) !important;
+            box-shadow:
+                0 0 0 1px rgba(var(--ln-accent-rgb), 0.12),
+                0 18px 48px -20px var(--ln-black-55),
+                0 0 36px -12px rgba(var(--ln-accent-rgb), 0.08);
+        }
+        .ln-charge-border:hover::after {
+            opacity: 1;
+            animation: ln-charge-sweep 2.2s ease-in-out infinite;
+        }
+        @keyframes ln-charge-sweep {
+            0% { background-position: 130% 50%; }
+            100% { background-position: -130% 50%; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .ln-charge-border:hover::after { animation: none; opacity: 0.35; }
+        }
+        /* 技能区下方：单行 logo，纯横向无限滚动（双段拼接无缝循环） */
+        .ln-skill-logos {
+            margin-top: clamp(2.5rem, 6vw, 4rem);
+            padding-bottom: 0.25rem;
+            overflow: hidden;
+            user-select: none;
+            pointer-events: none;
+        }
+        .ln-skill-logos__viewport {
+            overflow: hidden;
+            padding: clamp(1.25rem, 3.5vw, 2rem) 0;
+            /* 左右淡入用伪元素，避免部分浏览器 mask + 动画导致整行不可见 */
+            position: relative;
+        }
+        .ln-skill-logos__viewport::before,
+        .ln-skill-logos__viewport::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: clamp(2rem, 8vw, 4rem);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .ln-skill-logos__viewport::before {
+            left: 0;
+            background: linear-gradient(90deg, var(--ln-bg-deep), transparent);
+        }
+        .ln-skill-logos__viewport::after {
+            right: 0;
+            background: linear-gradient(270deg, var(--ln-bg-deep), transparent);
+        }
+        .ln-skill-logos__track {
+            display: flex;
+            width: max-content;
+            flex-shrink: 0;
+            align-items: center;
+            will-change: transform;
+            animation: ln-skill-logos-scroll 52s linear infinite;
+        }
+        @keyframes ln-skill-logos-scroll {
+            from { transform: translate3d(0, 0, 0); }
+            to { transform: translate3d(-50%, 0, 0); }
+        }
+        .ln-skill-logos__segment {
+            display: flex;
+            flex-shrink: 0;
+            align-items: center;
+            gap: clamp(1.1rem, 2.8vw, 2.15rem);
+            padding-inline: clamp(0.5rem, 2vw, 1rem);
+        }
+        .ln-skill-logos__chip {
+            flex: 0 0 auto;
+            width: clamp(2.85rem, 7vw, 3.35rem);
+            height: clamp(2.85rem, 7vw, 3.35rem);
+            padding: 0.45rem;
+            border-radius: 0.85rem;
+            border: 1px solid var(--ln-white-10);
+            background: var(--ln-white-035);
+            box-shadow: 0 12px 32px -18px var(--ln-black-65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ln-skill-logos__chip img {
+            width: 1.65rem;
+            height: 1.65rem;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 1px 3px var(--ln-black-55));
+        }
+        .ln-skill-logos__chip--lit {
+            background: var(--ln-white-94);
+            border-color: var(--ln-black-08);
+            box-shadow: 0 14px 36px -16px var(--ln-black-45);
+        }
+        .ln-skill-logos__chip--void {
+            background: var(--ln-glass-16-18-92);
+            border-color: var(--ln-white-14);
+        }
+        @media (min-width: 768px) {
+            .ln-skill-logos__chip img {
+                width: 1.85rem;
+                height: 1.85rem;
+            }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .ln-skill-logos__track {
+                animation: none !important;
+                transform: translate3d(0, 0, 0) !important;
+            }
+        }
+        /* 联系区磁贴：内层卡片不用 scale，避免与外层 magnetic 位移打架 */
+        .ln-magnetic .ln-surface-card {
+            transition: border-color 0.35s var(--ease-out-quart), box-shadow 0.35s;
+        }
+        .ln-magnetic .ln-surface-card:hover {
+            transform: none;
+            border-color: rgba(var(--ln-hover-rgb), 0.38) !important;
+            box-shadow: 0 16px 40px -18px var(--ln-black-60);
+        }
+        /* 项目与实习：分组 + 网格卡片 */
+        .ln-career-group__head time {
+            letter-spacing: 0.12em;
+        }
+        .ln-career-group__grid.ln-exp-grid {
+            display: grid;
+        }
+        .ln-career-group__grid.ln-exp-grid > .ln-exp-card {
+            flex: initial;
+            max-width: none;
+            scroll-snap-align: unset;
+            border-radius: 0;
+        }
+        /* 项目与实习：除芒果山海主块外，参考「大图 + 文案」Z 形交替 */
+        .ln-career-zlist {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(2.5rem, 5vw, 3.75rem);
+        }
+        .ln-career-zrow {
+            border-radius: 1.25rem;
+            transition: transform 0.4s var(--ease-out-quart), border-color 0.35s ease;
+        }
+        @media (min-width: 768px) {
+            .ln-career-zrow {
+                border-radius: 0;
+            }
+            .ln-career-zrow:hover {
+                transform: translateY(-3px);
+            }
+        }
+        .ln-career-zrow__inner {
+            min-height: 0;
+        }
+        .ln-career-zrow__media {
+            box-shadow: 0 20px 50px -28px var(--ln-black-85);
+            transition: transform 0.45s var(--ease-out-quart), box-shadow 0.45s ease;
+        }
+        .ln-career-zrow:hover .ln-career-zrow__media {
+            transform: scale(1.02);
+            box-shadow: 0 28px 60px -24px var(--ln-black-90);
+        }
+        .ln-career-zrow__img {
+            display: block;
+            min-height: 200px;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .ln-career-zrow:hover,
+            .ln-career-zrow:hover .ln-career-zrow__media {
+                transform: none;
+            }
+        }
+        .ln-exp-card {
+            flex: 0 0 min(340px, 85vw);
+            scroll-snap-align: center;
+            max-width: 360px;
+            border: 1px solid var(--ln-white-12);
+            background: var(--ln-bg-mid2);
+            cursor: pointer;
+            transition: transform 0.4s var(--ease-out-quart), border-color 0.4s var(--ease-out-quart);
+        }
+        .ln-exp-card:hover { transform: scale(1.02); border-color: rgba(var(--ln-hover-rgb),0.35); }
+        .ln-scrub-scale {
+            overflow: hidden;
+            transition: transform 0.45s var(--ease-out-quart);
+        }
+        .ln-exp-card:hover .ln-scrub-scale {
+            transform: scale(1.04);
+        }
+        .ln-scrub-scale-img {
+            transform-origin: center center;
+            will-change: transform;
+        }
+        .ln-exp-card:hover .ln-scrub-scale-img {
+            transition: transform 0.45s var(--ease-out-quart);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .ln-exp-card:hover { transform: none; }
+            .ln-exp-card:hover .ln-scrub-scale { transform: none; }
+            .ln-deep-lift { perspective: none; }
+            .ln-deep-lift .ln-surface-card { transform-style: flat; will-change: auto; }
+            .ln-major-motion { opacity: 1 !important; transform: none !important; filter: none !important; }
+        }
     </style>
 </head>
 <body class="ln-body text-white overflow-x-hidden antialiased">
-    <p class="fixed bottom-4 left-1/2 -translate-x-1/2 z-[60] text-[10px] uppercase tracking-[0.35em] text-white/35 pointer-events-none max-w-[90vw] text-center md:hidden landscape:hidden">横屏浏览体验更接近参考站</p>
+    <noscript>
+        <style>
+            .ln-line, .ln-reveal { opacity: 1 !important; transform: none !important; }
+            .ln-major-motion { opacity: 1 !important; transform: none !important; filter: none !important; }
+            #hero-parallax-img.ln-hero-img-enter { opacity: 1 !important; transform: none !important; }
+        </style>
+    </noscript>
+    <div id="ln-scroll-progress" aria-hidden="true"></div>
+    <p class="fixed bottom-4 left-1/2 -translate-x-1/2 z-[60] text-[10px] uppercase tracking-[0.35em] text-white/[0.44] pointer-events-none max-w-[90vw] text-center md:hidden landscape:hidden">横屏浏览体验更接近参考站</p>
 
     <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-transparent mix-blend-difference md:mix-blend-normal">
         <div class="max-w-[1200px] mx-auto px-5 py-4 flex items-center justify-between">
             <a href="#hero" onclick="smoothScrollTo('hero'); return false;" class="flex items-center gap-3 group">
-                <span class="ln-display text-3xl tracking-wide text-[#d4ff00] group-hover:text-white transition-colors">imad</span>
+                <span class="ln-display text-3xl tracking-wide text-[var(--ln-lime)] group-hover:text-white transition-colors">imad</span>
             </a>
             <div class="hidden lg:flex items-center gap-8 text-[11px] font-semibold uppercase tracking-[0.2em]">
-                <a href="#about" onclick="smoothScrollTo('about'); return false;" class="hover:text-[#d4ff00] transition-colors">关于</a>
-                <a href="#portfolio" onclick="smoothScrollTo('portfolio'); return false;" class="hover:text-[#d4ff00] transition-colors">作品</a>
-                <a href="#experience" onclick="smoothScrollTo('experience'); return false;" class="hover:text-[#d4ff00] transition-colors">实习</a>
-                <a href="#awards" onclick="smoothScrollTo('awards'); return false;" class="hover:text-[#d4ff00] transition-colors">荣誉</a>
-                <a href="#ip" onclick="smoothScrollTo('ip'); return false;" class="hover:text-[#d4ff00] transition-colors">知识产权</a>
-                <a href="#skills" onclick="smoothScrollTo('skills'); return false;" class="hover:text-[#d4ff00] transition-colors">技能</a>
-                <a href="#contact" onclick="smoothScrollTo('contact'); return false;" class="hover:text-[#d4ff00] transition-colors">联系</a>
+                <a href="#about" onclick="smoothScrollTo('about'); return false;" class="hover:text-[var(--ln-lime)] transition-colors">关于</a>
+                <a href="#portfolio" onclick="smoothScrollTo('portfolio'); return false;" class="hover:text-[var(--ln-lime)] transition-colors">作品</a>
+                <a href="#project-journey" onclick="smoothScrollTo('project-journey'); return false;" class="hover:text-[var(--ln-lime)] transition-colors">实习·项目</a>
+                <a href="#honors-ip" onclick="smoothScrollTo('honors-ip'); return false;" class="hover:text-[var(--ln-lime)] transition-colors">荣誉·知产</a>
+                <a href="#skills" onclick="smoothScrollTo('skills'); return false;" class="hover:text-[var(--ln-lime)] transition-colors">技能</a>
+                <a href="#contact" onclick="smoothScrollTo('contact'); return false;" class="hover:text-[var(--ln-lime)] transition-colors">联系</a>
             </div>
-            <div class="flex items-center gap-3">
-                <a href="assets/resume.pdf" target="_blank" class="ln-btn ln-btn-solid hidden sm:inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold uppercase tracking-wider no-underline">简历</a>
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="assets/resume.pdf" target="_blank" class="ln-btn ln-btn-solid ln-magnetic hidden sm:inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold uppercase tracking-wider no-underline">简历</a>
                 <button id="mobile-menu-button" type="button" class="lg:hidden w-11 h-11 flex items-center justify-center text-xl" aria-label="菜单"><i class="fas fa-bars"></i></button>
             </div>
         </div>
-        <div id="mobile-menu" class="hidden lg:hidden fixed inset-0 bg-black z-50 pt-24 px-6">
+        <div id="mobile-menu" class="hidden lg:hidden fixed inset-0 ln-bg-deep z-50 pt-24 px-6">
             <div class="flex flex-col gap-6 text-2xl ln-display tracking-wide">
                 <a href="#about" onclick="toggleMobileMenu();smoothScrollTo('about')" class="border-b border-white/10 pb-4">关于</a>
                 <a href="#portfolio" onclick="toggleMobileMenu();smoothScrollTo('portfolio')" class="border-b border-white/10 pb-4">作品</a>
-                <a href="#experience" onclick="toggleMobileMenu();smoothScrollTo('experience')" class="border-b border-white/10 pb-4">实习</a>
+                <a href="#project-journey" onclick="toggleMobileMenu();smoothScrollTo('project-journey')" class="border-b border-white/10 pb-4">实习·项目</a>
+                <a href="#honors-ip" onclick="toggleMobileMenu();smoothScrollTo('honors-ip')" class="border-b border-white/10 pb-4">荣誉·知产</a>
+                <a href="#skills" onclick="toggleMobileMenu();smoothScrollTo('skills')" class="border-b border-white/10 pb-4">技能</a>
                 <a href="#contact" onclick="toggleMobileMenu();smoothScrollTo('contact')" class="pb-4">联系</a>
                 <a href="assets/resume.pdf" target="_blank" class="ln-btn ln-btn-solid mt-4 block text-center py-4 text-lg font-bold no-underline">下载简历</a>
             </div>
@@ -166,12 +1385,12 @@
         <div class="flex-1 max-w-[1200px] w-full mx-auto px-5 pt-28 pb-8 grid lg:grid-cols-12 gap-8 lg:gap-4 items-end lg:items-center relative z-10">
             <div class="lg:col-span-6">
             <div id="hero-parallax-text-inner" class="flex flex-col justify-center lg:min-h-[70vh] space-y-8">
-                <p class="text-[11px] uppercase tracking-[0.35em] text-[#d4ff00]/90 ln-line-group">
-                    <span class="ln-line ln-line-inline" style="--ln-i:0">浙江大学软件学院 · 信息产品设计 · 保研</span>
+                <p class="ln-eyebrow ln-line-group">
+                    <span class="ln-line ln-line-inline" style="--ln-i:0">浙江大学 · 信息产品设计 · </span>
                 </p>
                 <div class="ln-line-group">
                     <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-[1.05]"><span class="ln-line" style="--ln-i:1">王耀颉</span></h1>
-                    <p class="ln-display text-[clamp(4rem,18vw,10rem)] leading-none text-[#d4ff00] mt-2"><span class="ln-line" style="--ln-i:2">imad</span></p>
+                    <p class="ln-display text-[clamp(4rem,18vw,10rem)] leading-none text-[var(--ln-lime)] mt-2"><span class="ln-line" style="--ln-i:2">imad</span></p>
                 </div>
                 <p class="text-lg sm:text-xl text-white/75 max-w-xl leading-relaxed ln-line-group">
                     <span class="ln-line" style="--ln-i:3">智能交互设计师 · AI 产品经理</span>
@@ -179,279 +1398,482 @@
                 </p>
                 <div class="flex flex-wrap gap-4 ln-line-group">
                     <span class="ln-line ln-line-inline" style="--ln-i:5">
-                        <a href="#portfolio" onclick="smoothScrollTo('portfolio'); return false;" class="ln-btn ln-btn-solid inline-flex items-center gap-3 px-8 py-4 font-bold text-sm uppercase tracking-wider no-underline">进入作品</a>
+                        <a href="#portfolio" onclick="smoothScrollTo('portfolio'); return false;" class="ln-btn ln-btn-solid ln-magnetic inline-flex items-center gap-3 px-8 py-4 font-bold text-sm uppercase tracking-wider no-underline">进入作品</a>
                     </span>
                     <span class="ln-line ln-line-inline" style="--ln-i:6">
-                        <a href="assets/resume.pdf" target="_blank" class="ln-btn inline-flex items-center gap-3 px-8 py-4 text-sm font-medium uppercase tracking-wider no-underline">简历 PDF</a>
+                        <a href="assets/resume.pdf" target="_blank" class="ln-btn ln-magnetic inline-flex items-center gap-3 px-8 py-4 text-sm font-medium uppercase tracking-wider no-underline">简历 PDF</a>
                     </span>
                 </div>
             </div>
             </div>
             <div class="lg:col-span-6 relative flex justify-center lg:justify-end">
                 <div class="relative w-full max-w-md lg:max-w-none">
-                    <div class="absolute -inset-4 border border-[#d4ff00]/20 rounded-sm skew-y-1 pointer-events-none hidden lg:block"></div>
-                    <img id="hero-parallax-img" src="本人照片.jpg" alt="王耀颉" width="1200" height="1600" class="relative w-full max-h-[52vh] lg:max-h-[min(78vh,640px)] object-contain object-bottom mx-auto grayscale-[20%] contrast-[1.05]">
+                    <div class="absolute -inset-4 border border-[rgba(var(--ln-accent-rgb),0.2)] rounded-sm skew-y-1 pointer-events-none hidden lg:block"></div>
+                    <div id="hero-parallax-img-wrap" class="relative w-full mx-auto">
+                        <img id="hero-parallax-img" src="本人照片.jpg" alt="王耀颉" width="1200" height="1600" class="relative w-full max-h-[52vh] lg:max-h-[min(78vh,640px)] object-contain object-bottom mx-auto grayscale-[20%] contrast-[1.05] ln-hero-img-enter" onerror="this.onerror=null;this.src='https://picsum.photos/id/1027/900/1200'">
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="ln-scroll-hint absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 text-[10px] uppercase tracking-[0.45em] text-white/40 pointer-events-none">
-            <span class="w-px h-10 bg-gradient-to-b from-transparent via-[#d4ff00]/60 to-transparent"></span>
+        <div class="ln-scroll-hint absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 text-[10px] uppercase tracking-[0.45em] text-white/[0.5] pointer-events-none">
+            <span class="w-px h-10 bg-gradient-to-b from-transparent via-[rgba(var(--ln-accent-rgb),0.6)] to-transparent"></span>
             Scroll
         </div>
     </section>
 
     <div class="ln-marquee-wrap ln-reveal">
-        <div class="ln-marquee py-3 text-[#d4ff00] ln-display text-xl md:text-2xl tracking-wide whitespace-nowrap">
-            <span class="px-8">DESIGN</span><span class="text-white/30">·</span>
-            <span class="px-8">CODE</span><span class="text-white/30">·</span>
-            <span class="px-8">AI PRODUCT</span><span class="text-white/30">·</span>
-            <span class="px-8">AR / VR</span><span class="text-white/30">·</span>
-            <span class="px-8">HCI</span><span class="text-white/30">·</span>
-            <span class="px-8">DESIGN</span><span class="text-white/30">·</span>
-            <span class="px-8">CODE</span><span class="text-white/30">·</span>
-            <span class="px-8">AI PRODUCT</span><span class="text-white/30">·</span>
-            <span class="px-8">AR / VR</span><span class="text-white/30">·</span>
-            <span class="px-8">HCI</span><span class="text-white/30">·</span>
+        <div class="ln-marquee py-3 text-[var(--ln-lime)] ln-display text-xl md:text-2xl tracking-wide whitespace-nowrap" aria-hidden="true">
+            <span class="px-8">DESIGN</span><span class="text-white/30">·</span><span class="px-8">CODE</span><span class="text-white/30">·</span><span class="px-8">AI PRODUCT</span><span class="text-white/30">·</span><span class="px-8">AR / VR</span><span class="text-white/30">·</span><span class="px-8">HCI</span><span class="text-white/30">·</span>
+            <span class="px-8">DESIGN</span><span class="text-white/30">·</span><span class="px-8">CODE</span><span class="text-white/30">·</span><span class="px-8">AI PRODUCT</span><span class="text-white/30">·</span><span class="px-8">AR / VR</span><span class="text-white/30">·</span><span class="px-8">HCI</span><span class="text-white/30">·</span>
+            <span class="px-8">DESIGN</span><span class="text-white/30">·</span><span class="px-8">CODE</span><span class="text-white/30">·</span><span class="px-8">AI PRODUCT</span><span class="text-white/30">·</span><span class="px-8">AR / VR</span><span class="text-white/30">·</span><span class="px-8">HCI</span><span class="text-white/30">·</span>
+            <span class="px-8">DESIGN</span><span class="text-white/30">·</span><span class="px-8">CODE</span><span class="text-white/30">·</span><span class="px-8">AI PRODUCT</span><span class="text-white/30">·</span><span class="px-8">AR / VR</span><span class="text-white/30">·</span><span class="px-8">HCI</span><span class="text-white/30">·</span>
+        </div>
+    </div>
+    <div class="ln-marquee-wrap ln-marquee--reverse ln-reveal border-t-0">
+        <div class="ln-marquee py-2.5 text-white/32 ln-display text-sm md:text-lg tracking-[0.2em] whitespace-nowrap" aria-hidden="true">
+            <span class="px-10">ZJU</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span><span class="px-10">HNU DESIGN</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span><span class="px-10">AI PM</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span><span class="px-10">HCI</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span><span class="px-10">PORTFOLIO 2026</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span>
+            <span class="px-10">ZJU</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span><span class="px-10">HNU DESIGN</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span><span class="px-10">AI PM</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span><span class="px-10">HCI</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span><span class="px-10">PORTFOLIO 2026</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span>
+            <span class="px-10">ZJU</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span><span class="px-10">HNU DESIGN</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span><span class="px-10">AI PM</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span><span class="px-10">HCI</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span><span class="px-10">PORTFOLIO 2026</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span>
+            <span class="px-10">ZJU</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span><span class="px-10">HNU DESIGN</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span><span class="px-10">AI PM</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span><span class="px-10">HCI</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span><span class="px-10">PORTFOLIO 2026</span><span class="text-[rgba(var(--ln-accent-rgb),0.4)]">/</span>
         </div>
     </div>
 
-    <section id="about" class="py-24 md:py-32 bg-[#080808] border-t border-white/5">
+    <section id="about" class="ln-section-major ln-bg-raised border-t border-white/[0.06]">
         <div class="max-w-[1200px] mx-auto px-5">
-            <div class="ln-reveal ln-line-group flex flex-col md:flex-row md:items-end gap-4 md:gap-16 mb-16 md:mb-24">
+            <div class="ln-about-block ln-major-motion ln-line-group flex flex-col md:flex-row md:items-end gap-4 md:gap-16 mb-14 md:mb-20">
                 <h2 class="ln-display text-[clamp(3rem,12vw,8rem)] leading-[0.9] text-white"><span class="ln-line" style="--ln-i:0">在案上</span></h2>
-                <h2 class="ln-display text-[clamp(3rem,12vw,8rem)] leading-[0.9] text-[#d4ff00]"><span class="ln-line" style="--ln-i:1">在交付</span></h2>
+                <h2 class="ln-display text-[clamp(3rem,12vw,8rem)] leading-[0.9] text-[var(--ln-lime)]"><span class="ln-line" style="--ln-i:1">在交付</span></h2>
             </div>
-            <div class="grid md:grid-cols-12 gap-16 ln-reveal">
-                <div class="md:col-span-5">
-                    <p class="text-[11px] uppercase tracking-[0.3em] text-[#d4ff00] mb-6">About</p>
+            <div class="grid md:grid-cols-12 gap-14 md:gap-20 ln-about-block ln-major-motion">
+                <div class="md:col-span-5 ln-reading">
+                    <p class="ln-eyebrow tracking-[0.3em] mb-6">About</p>
                     <p class="text-lg text-white/80 leading-relaxed mb-6">中共党员；湖南大学设计艺术学院本科（GPA 3.75，专业排名 4/114，前 3%），保研浙江大学软件学院信息产品设计方向。</p>
-                    <p class="text-white/50 leading-relaxed">专注 AI 赋能的智能产品与交互创新，具备软硬件协同、AR/VR 空间交互、AI Agent 与产品全链路能力。</p>
+                    <p class="text-white/52 leading-relaxed">专注 AI 赋能的智能产品与交互创新，具备软硬件协同、AR/VR 空间交互、AI Agent 与产品全链路能力。</p>
                     <div class="mt-12 flex gap-12">
-                        <div><div class="ln-display text-5xl text-[#d4ff00]">3.75</div><div class="text-xs uppercase tracking-widest text-white/40 mt-1">GPA</div></div>
-                        <div><div class="ln-display text-5xl text-white">4/114</div><div class="text-xs uppercase tracking-widest text-white/40 mt-1">排名</div></div>
+                        <div><div class="ln-display text-5xl text-[var(--ln-lime)]">3.75</div><div class="text-xs uppercase tracking-widest text-white/48 mt-1">GPA</div></div>
+                        <div><div class="ln-display text-5xl text-white">4/114</div><div class="text-xs uppercase tracking-widest text-white/48 mt-1">排名</div></div>
                     </div>
                 </div>
-                <div class="md:col-span-7 space-y-12">
-                    <div class="border-l-2 border-[#d4ff00]/40 pl-8">
-                        <div class="text-xs text-white/40 uppercase tracking-widest mb-2">2026 —</div>
-                        <div class="text-xl font-semibold">浙江大学软件学院</div>
-                        <div class="text-[#d4ff00] text-sm mt-1">信息产品设计 · 保研</div>
+                <div class="md:col-span-7 space-y-12 ln-stagger">
+                    <div class="border-l-2 border-[rgba(var(--ln-accent-rgb),0.35)] pl-8">
+                        <div class="text-xs text-white/48 uppercase tracking-widest mb-2">2026 —</div>
+                        <div class="text-xl font-semibold">浙江大学</div>
+                        <div class="text-[var(--ln-lime)] text-sm mt-1">信息产品设计</div>
                     </div>
                     <div class="border-l-2 border-white/10 pl-8">
-                        <div class="text-xs text-white/40 uppercase tracking-widest mb-2">2022 — 2026</div>
+                        <div class="text-xs text-white/48 uppercase tracking-widest mb-2">2022 — 2026</div>
                         <div class="text-xl font-semibold">湖南大学设计艺术学院</div>
-                        <div class="text-[#d4ff00] text-sm mt-1">数据智能与服务设计</div>
-                        <p class="text-sm text-white/45 mt-3">多门核心课程 90+；编程与交互设计课程名列前茅</p>
+                        <div class="text-[var(--ln-lime)] text-sm mt-1">数据智能与服务设计</div>
+                        <p class="text-sm text-white/52 mt-3">多门核心课程 90+；编程与交互设计课程名列前茅</p>
                     </div>
                     <div class="border-l-2 border-white/10 pl-8">
-                        <div class="text-xs text-white/40 uppercase tracking-widest mb-2">2024 夏</div>
+                        <div class="text-xs text-white/48 uppercase tracking-widest mb-2">2024 夏</div>
                         <div class="text-xl font-semibold">德国普福尔茨海姆应用技术大学</div>
-                        <div class="text-[#d4ff00] text-sm mt-1">设计专业 · 公费交流</div>
+                        <div class="text-[var(--ln-lime)] text-sm mt-1">设计专业 · 公费交流</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="portfolio" class="py-24 md:py-32 bg-[#050505]">
-        <div class="max-w-[1200px] mx-auto px-5">
-            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12">
+    <section id="portfolio" class="ln-section-portfolio mt-8 md:mt-12 ln-bg-deep border-t border-white/[0.06]">
+        <div class="max-w-[1200px] mx-auto px-5 ln-portfolio-intro ln-major-motion">
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12 md:mb-14">
                 <div class="ln-line-group">
-                    <p class="text-[11px] uppercase tracking-[0.35em] text-[#d4ff00] mb-4"><span class="ln-line ln-line-inline" style="--ln-i:0">Selected Work</span></p>
-                    <h2 class="ln-display text-6xl md:text-8xl leading-none"><span class="ln-line" style="--ln-i:1">作品集</span></h2>
+                    <p class="ln-eyebrow mb-4"><span class="ln-line ln-line-inline" style="--ln-i:0">Selected Work</span></p>
+                    <h2 class="ln-display text-6xl md:text-8xl leading-none ln-clip-title inline-block"><span class="ln-line" style="--ln-i:1">作品集</span></h2>
                 </div>
-                <button type="button" onclick="showAllProjects()" class="ln-btn text-left text-xs uppercase tracking-[0.25em] text-white/40 border-white/15 self-start lg:self-auto px-4 py-2 hover:!text-black">全部项目 ↗</button>
+                <button type="button" onclick="showAllProjects()" class="ln-btn text-left text-xs uppercase tracking-[0.25em] text-white/[0.48] border-white/15 self-start lg:self-auto px-4 py-2 hover:!text-black">全部项目 ↗</button>
             </div>
-            <p class="text-white/40 text-sm max-w-2xl mb-10 ln-reveal">7 项核心作品（横向滑动浏览 · 点击查看详情）；下方为补充经历。</p>
-            <div id="project-grid" class="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-4 -mx-5 px-5 md:mx-0 md:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"></div>
-            <div class="mt-24 pt-16 border-t border-white/10 ln-reveal">
-                <h3 class="ln-display text-4xl text-white/90 mb-10">More</h3>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div class="ln-more-card p-6 border border-white/10 hover:border-[#39ff14]/35 bg-[#0c0c0c]">
-                        <div class="text-[10px] uppercase tracking-widest text-white/35 mb-2">研究</div>
-                        <div class="font-semibold text-lg">GenZ-Alpha</div>
-                        <p class="text-sm text-white/45 mt-2">基于抖音的代际行为研究与论文。</p>
-                    </div>
-                    <div class="ln-more-card p-6 border border-white/10 hover:border-[#39ff14]/35 bg-[#0c0c0c]">
-                        <div class="text-[10px] uppercase tracking-widest text-white/35 mb-2">工业</div>
-                        <div class="font-semibold text-lg">三一重工</div>
-                        <p class="text-sm text-white/45 mt-2">新一代 16 吨叉车工业设计。</p>
-                    </div>
-                    <div class="ln-more-card p-6 border border-white/10 hover:border-[#39ff14]/35 bg-[#0c0c0c]">
-                        <div class="text-[10px] uppercase tracking-widest text-white/35 mb-2">科研平台</div>
-                        <div class="font-semibold text-lg">文旅部重点实验室</div>
-                        <p class="text-sm text-white/45 mt-2">数字文化创意智能设计技术科研。</p>
-                    </div>
-                    <div class="ln-more-card p-6 border border-white/10 hover:border-[#39ff14]/35 bg-[#0c0c0c]">
-                        <div class="text-[10px] uppercase tracking-widest text-white/35 mb-2">芒果 TV</div>
-                        <div class="font-semibold text-lg">山海璇玑大模型</div>
-                        <p class="text-sm text-white/45 mt-2">文博场景商业化与产品设计。</p>
-                    </div>
-                    <div class="ln-more-card p-6 border border-white/10 hover:border-[#39ff14]/35 bg-[#0c0c0c] md:col-span-2 lg:col-span-1">
-                        <div class="text-[10px] uppercase tracking-widest text-white/35 mb-2">芒果 TV</div>
-                        <div class="font-semibold text-lg">山海听听</div>
-                        <p class="text-sm text-white/45 mt-2">AI 智慧讲解平台。</p>
-                    </div>
+        </div>
+        <div class="ln-full-bleed-x ln-port-pin-outer ln-major-motion">
+            <div class="ln-port-pin-sticky">
+                <div class="ln-port-viewport">
+                    <div id="project-grid" class="ln-port-track" aria-label="作品集横向滚动"></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="experience" class="py-24 md:py-32 bg-[#080808] border-t border-white/5">
-        <div class="max-w-[900px] mx-auto px-5 ln-reveal">
-            <p class="text-[11px] uppercase tracking-[0.35em] text-[#d4ff00] mb-4">On the desk</p>
-            <h2 class="ln-display text-6xl md:text-7xl mb-16">实习</h2>
-            <div class="space-y-16">
-                <div>
-                    <div class="text-xs uppercase tracking-widest text-white/35 mb-3">2025.11 — 2026.03</div>
-                    <div class="text-2xl font-bold text-[#d4ff00]">芒果 TV（山海）</div>
-                    <div class="text-white/60 mt-1">AI 产品经理</div>
-                    <p class="mt-6 text-white/70 leading-relaxed">主导<strong class="text-white">赛博佛祖</strong> 0→1；负责<strong class="text-white">山海映真</strong> 全版本迭代；参与<strong class="text-white">山海璇玑</strong>、<strong class="text-white">山海听听</strong> 设计与商业化。</p>
+    <section id="project-journey" class="ln-section-major ln-section-paper border-t border-white/[0.06]">
+        <div class="max-w-[1200px] mx-auto px-5 mb-12 md:mb-16">
+            <p class="ln-eyebrow mb-3">Experience</p>
+            <p class="text-white/[0.52] text-sm max-w-2xl ln-reading ln-reveal leading-relaxed">实习与项目经历分为两块独立展示；核心作品见上一屏作品集。</p>
+        </div>
+        <div class="max-w-[1200px] mx-auto px-5 space-y-20 md:space-y-28 lg:space-y-32">
+            <div id="career-internship-section" class="ln-career-split">
+                <div class="ln-line-group mb-8 md:mb-10">
+                    <p class="ln-eyebrow mb-4"><span class="ln-line ln-line-inline" style="--ln-i:0">Internship</span></p>
+                    <h2 class="ln-display text-5xl md:text-7xl lg:text-8xl leading-[0.95] ln-clip-title text-white"><span class="ln-line" style="--ln-i:1">实习</span></h2>
                 </div>
-                <div>
-                    <div class="text-xs uppercase tracking-widest text-white/35 mb-3">2024.08 — 2024.09</div>
-                    <div class="text-2xl font-bold text-white">浪潮软件集团</div>
-                    <div class="text-white/60 mt-1">评测实验室 · 实习</div>
-                    <p class="mt-6 text-white/70 leading-relaxed">功能 / 兼容性 / 体验测试与报告输出。</p>
+                <div id="career-internship-root"></div>
+            </div>
+            <div id="career-projects-section" class="ln-career-split">
+                <div class="ln-line-group mb-8 md:mb-10">
+                    <p class="ln-eyebrow mb-4"><span class="ln-line ln-line-inline" style="--ln-i:0">Projects</span></p>
+                    <h2 class="ln-display text-5xl md:text-7xl lg:text-8xl leading-[0.95] ln-clip-title text-[var(--ln-lime)]"><span class="ln-line" style="--ln-i:1">项目经历</span></h2>
+                </div>
+                <div id="career-projects-root"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="honors-ip" class="ln-section-major ln-bg-deep relative overflow-hidden border-t border-white/[0.06]">
+        <div class="ln-honors-wrap" aria-hidden="true"><div class="ln-honors-bg">HONORS</div></div>
+        <div class="max-w-[1200px] mx-auto px-5 ln-honors-head-wrap pointer-events-auto">
+            <div class="text-center ln-honors-head ln-major-motion pt-1">
+                <p class="ln-eyebrow mb-3">Recognition &amp; Rights</p>
+                <h2 class="ln-display text-5xl md:text-7xl leading-[0.95] ln-clip-title inline-block text-[var(--ln-lime)]">荣誉</h2>
+                <h2 class="ln-display text-5xl md:text-7xl leading-[0.95] text-white/90 mt-1 ln-clip-title inline-block">与知识产权</h2>
+            </div>
+        </div>
+        <div class="ln-fan-hi-outer ln-major-motion" aria-label="荣誉与知识产权">
+            <div id="ln-hi-parallax" class="ln-hi-parallax-shell">
+                <div class="ln-hi-carousel max-w-[1280px] mx-auto">
+                    <button type="button" class="ln-hi-carousel__btn ln-hi-carousel__btn--prev" id="ln-hi-carousel-prev" aria-label="上一项">
+                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                    </button>
+                    <div class="ln-hi-carousel__viewport" id="ln-hi-carousel-viewport">
+                        <div id="honors-ip-track" class="ln-hi-carousel__track">
+                            <div class="ln-hi-slide is-active">
+                                <article class="ln-hi-card ln-hi-card--awards ln-charge-border border border-white/10">
+                                    <div class="ln-hi-awards-plate" aria-hidden="true">
+                                        <i class="fas fa-certificate"></i>
+                                        <span class="ln-hi-awards-plate__label">Awards</span>
+                                        <span class="ln-hi-awards-plate__hint">证书附图示意</span>
+                                    </div>
+                                    <div class="flex flex-col flex-1 min-h-0 px-5 pb-5 md:px-6 md:pb-6">
+                                        <p class="ln-hi-card__category pt-2">国家级 · 专项与综合赛事</p>
+                                        <div class="ln-hi-card__scroll mt-3 pr-1">
+                                            <ul class="ln-hi-awards-list">
+                                                <li class="ln-hi-awards-list__item">中国高校计算机大赛 - 移动应用创新赛 · 全国三等奖</li>
+                                                <li class="ln-hi-awards-list__item">新质点设计奖 · 国家级新质点奖</li>
+                                                <li class="ln-hi-awards-list__item">G-CROSS 跨界艺术创意奖 · 国家级铜奖（4 项）</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                            <div class="ln-hi-slide">
+                                <article class="ln-hi-card ln-hi-card--awards ln-charge-border border border-white/10">
+                                    <div class="ln-hi-awards-plate" aria-hidden="true">
+                                        <i class="fas fa-certificate"></i>
+                                        <span class="ln-hi-awards-plate__label">Awards</span>
+                                        <span class="ln-hi-awards-plate__hint">证书附图示意</span>
+                                    </div>
+                                    <div class="flex flex-col flex-1 min-h-0 px-5 pb-5 md:px-6 md:pb-6">
+                                        <p class="ln-hi-card__category pt-2">国家级 · 米兰设计周</p>
+                                        <div class="ln-hi-card__scroll mt-3 pr-1">
+                                            <ul class="ln-hi-awards-list">
+                                                <li class="ln-hi-awards-list__item">米兰设计周 · 国家级二等奖（2 项）</li>
+                                                <li class="ln-hi-awards-list__item">米兰设计周 · 国家级三等奖（3 项）</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                            <div class="ln-hi-slide">
+                                <article class="ln-hi-card ln-hi-card--awards ln-charge-border border border-white/10">
+                                    <div class="ln-hi-awards-plate" aria-hidden="true">
+                                        <i class="fas fa-certificate"></i>
+                                        <span class="ln-hi-awards-plate__label">Awards</span>
+                                        <span class="ln-hi-awards-plate__hint">证书附图示意</span>
+                                    </div>
+                                    <div class="flex flex-col flex-1 min-h-0 px-5 pb-5 md:px-6 md:pb-6">
+                                        <p class="ln-hi-card__category pt-2">省部级 · 核心赛事</p>
+                                        <div class="ln-hi-card__scroll mt-3 pr-1">
+                                            <ul class="ln-hi-awards-list">
+                                                <li class="ln-hi-awards-list__item">「挑战杯」湖南省大学生创业计划竞赛 · 湖南省金奖</li>
+                                                <li class="ln-hi-awards-list__item">湖南省大学生创新大赛 · 湖南省一等奖（2 项）</li>
+                                                <li class="ln-hi-awards-list__item">米兰设计周 · 湖南省一等奖</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                            <div class="ln-hi-slide">
+                                <article class="ln-hi-card ln-hi-card--awards ln-charge-border border border-white/10">
+                                    <div class="ln-hi-awards-plate" aria-hidden="true">
+                                        <i class="fas fa-certificate"></i>
+                                        <span class="ln-hi-awards-plate__label">Awards</span>
+                                        <span class="ln-hi-awards-plate__hint">证书附图示意</span>
+                                    </div>
+                                    <div class="flex flex-col flex-1 min-h-0 px-5 pb-5 md:px-6 md:pb-6">
+                                        <p class="ln-hi-card__category pt-2">省部级 · 赛区与其他</p>
+                                        <div class="ln-hi-card__scroll mt-3 pr-1">
+                                            <ul class="ln-hi-awards-list">
+                                                <li class="ln-hi-awards-list__item">移动应用创新赛 · 华中赛区一等奖</li>
+                                                <li class="ln-hi-awards-list__item">NCDA 未来设计师大赛 · 湖南省赛区三等奖</li>
+                                                <li class="ln-hi-awards-list__item">全国大学生数字媒体科技作品及创意竞赛 · 湖南省赛区三等奖</li>
+                                                <li class="ln-hi-awards-list__item">中国移动 2024 年创客马拉松大赛 · 优胜奖</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                            <div class="ln-hi-slide">
+                                <article class="ln-hi-card ln-hi-card--awards ln-charge-border border border-white/10">
+                                    <div class="ln-hi-awards-plate" aria-hidden="true">
+                                        <i class="fas fa-certificate"></i>
+                                        <span class="ln-hi-awards-plate__label">Awards</span>
+                                        <span class="ln-hi-awards-plate__hint">证书附图示意</span>
+                                    </div>
+                                    <div class="flex flex-col flex-1 min-h-0 px-5 pb-5 md:px-6 md:pb-6">
+                                        <p class="ln-hi-card__category pt-2">校级 · 奖学金</p>
+                                        <div class="ln-hi-card__scroll mt-3 pr-1">
+                                            <ul class="ln-hi-awards-list">
+                                                <li class="ln-hi-awards-list__item">湖南大学一等学业奖学金</li>
+                                                <li class="ln-hi-awards-list__item">湖南大学二等学业奖学金</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                            <div class="ln-hi-slide">
+                                <article class="ln-hi-card ln-hi-card--awards ln-charge-border border border-white/10">
+                                    <div class="ln-hi-awards-plate" aria-hidden="true">
+                                        <i class="fas fa-certificate"></i>
+                                        <span class="ln-hi-awards-plate__label">Awards</span>
+                                        <span class="ln-hi-awards-plate__hint">证书附图示意</span>
+                                    </div>
+                                    <div class="flex flex-col flex-1 min-h-0 px-5 pb-5 md:px-6 md:pb-6">
+                                        <p class="ln-hi-card__category pt-2">校级 · 荣誉与学业</p>
+                                        <div class="ln-hi-card__scroll mt-3 pr-1">
+                                            <ul class="ln-hi-awards-list">
+                                                <li class="ln-hi-awards-list__item">湖南大学优秀学生干部</li>
+                                                <li class="ln-hi-awards-list__item">数据智能与服务设计模块 · 专题设计年级最高分（For the Street 等）</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                            <div class="ln-hi-slide">
+                                <article class="ln-hi-card ln-hi-card--ip ln-charge-border border border-white/10">
+                                    <div class="ln-hi-ip-plate" aria-hidden="true">
+                                        <div class="ln-hi-ip-plate__rail"></div>
+                                        <div class="ln-hi-ip-plate__inner">
+                                            <span class="ln-hi-ip-plate__kind">专利与软著</span>
+                                            <span class="ln-hi-ip-plate__meta">Patent &amp; software copyright</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col flex-1 min-h-0 px-5 pb-5 md:px-6 md:pb-6">
+                                        <div class="ln-hi-card__scroll mt-3 pr-1">
+                                            <p class="ln-hi-card__category">发明专利</p>
+                                            <h3 class="ln-hi-ip-title mt-2">基于 LCSS-拓扑特征融合的滑板动作识别和互动方法</h3>
+                                            <p class="ln-hi-ip-no">2025108867126</p>
+                                            <div class="mt-6 pt-6 border-t border-white/[0.06]">
+                                                <p class="ln-hi-card__category">软件著作权</p>
+                                                <div class="ln-hi-ip-block mt-3">
+                                                    <p class="ln-hi-ip-block__name">智能滑板运动分析与评估系统</p>
+                                                    <p class="ln-hi-ip-block__no">2025SR0447984</p>
+                                                </div>
+                                                <div class="ln-hi-ip-block">
+                                                    <p class="ln-hi-ip-block__name">Ansoul 情绪记录与沉浸式体验软件</p>
+                                                    <p class="ln-hi-ip-block__no">2025SR0129312</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                            <div class="ln-hi-slide">
+                                <article class="ln-hi-card ln-hi-card--ip ln-charge-border border border-white/10">
+                                    <div class="ln-hi-ip-plate" aria-hidden="true">
+                                        <div class="ln-hi-ip-plate__rail"></div>
+                                        <div class="ln-hi-ip-plate__inner">
+                                            <span class="ln-hi-ip-plate__kind">外观设计</span>
+                                            <span class="ln-hi-ip-plate__meta">Design · CN</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col flex-1 min-h-0 px-5 pb-5 md:px-6 md:pb-6">
+                                        <div class="ln-hi-card__scroll mt-3 pr-1">
+                                            <h3 class="ln-hi-ip-title">酒器套装（儒韵）</h3>
+                                            <p class="ln-hi-ip-no">2024305519423</p>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                            <div class="ln-hi-slide">
+                                <article class="ln-hi-card ln-hi-card--ip ln-charge-border border border-white/10">
+                                    <div class="ln-hi-ip-plate" aria-hidden="true">
+                                        <div class="ln-hi-ip-plate__rail"></div>
+                                        <div class="ln-hi-ip-plate__inner">
+                                            <span class="ln-hi-ip-plate__kind">美术作品</span>
+                                            <span class="ln-hi-ip-plate__meta">Copyrighted work · registration</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col flex-1 min-h-0 px-5 pb-5 md:px-6 md:pb-6">
+                                        <div class="ln-hi-card__scroll mt-3 pr-1">
+                                            <div class="ln-hi-ip-block">
+                                                <p class="ln-hi-ip-block__name">情绪精灵表情系列</p>
+                                                <p class="ln-hi-ip-block__no">陕作登字-2024-F-00056913</p>
+                                            </div>
+                                            <div class="ln-hi-ip-block">
+                                                <p class="ln-hi-ip-block__name">情绪精灵 logo</p>
+                                                <p class="ln-hi-ip-block__no">国作登字-2025-F-00003018</p>
+                                            </div>
+                                            <div class="ln-hi-ip-block">
+                                                <p class="ln-hi-ip-block__name">For the Street</p>
+                                                <p class="ln-hi-ip-block__no">国作登字-2025-F-00064825</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="ln-hi-carousel__btn ln-hi-carousel__btn--next" id="ln-hi-carousel-next" aria-label="下一项">
+                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+                    <div id="ln-hi-dots" class="ln-hi-dots" role="tablist" aria-label="荣誉与知识产权轮播位置" hidden></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="awards" class="py-24 md:py-32 bg-[#050505]">
+    <section id="skills" class="ln-section-major ln-bg-deep border-t border-white/[0.06] ln-deep-lift">
         <div class="max-w-[1200px] mx-auto px-5">
-            <h2 class="ln-display text-6xl md:text-8xl text-center mb-4 ln-reveal">荣誉</h2>
-            <p class="text-center text-white/35 text-sm mb-16 max-w-xl mx-auto ln-reveal">国家级 · 省部级 · 校级</p>
-            <div class="grid md:grid-cols-3 gap-5 ln-reveal">
-                <div class="border border-white/10 p-8 bg-[#0c0c0c]">
-                    <div class="text-[10px] uppercase text-[#d4ff00] tracking-widest mb-4">国家级</div>
-                    <ul class="space-y-4 text-sm text-white/55">
-                        <li>中国高校计算机大赛移动应用创新赛 · 全国三等奖</li>
-                        <li>米兰设计周 · 国二 ×2 / 国三 ×3</li>
-                        <li>G-CROSS · 国铜 ×4</li>
-                        <li>新质点设计奖 · 新质点奖</li>
-                    </ul>
-                </div>
-                <div class="border border-[#d4ff00]/25 p-8 bg-[#0c0c0c]">
-                    <div class="text-[10px] uppercase text-[#d4ff00] tracking-widest mb-4">省部级</div>
-                    <ul class="space-y-4 text-sm text-white/55">
-                        <li>挑战杯 · 湖南省金奖</li>
-                        <li>湖南省创新大赛 · 省一 ×2</li>
-                        <li>米兰设计周 · 湖南省一等奖</li>
-                        <li>移动应用创新赛 · 华中赛区一等奖</li>
-                        <li>NCDA / 数媒赛 · 省三</li>
-                        <li>移动创客马拉松 · 优胜奖</li>
-                    </ul>
-                </div>
-                <div class="border border-white/10 p-8 bg-[#0c0c0c]">
-                    <div class="text-[10px] uppercase text-[#d4ff00] tracking-widest mb-4">校级</div>
-                    <ul class="space-y-4 text-sm text-white/55">
-                        <li>湖南大学一等学业奖学金</li>
-                        <li>湖南大学二等学业奖学金</li>
-                        <li>湖南大学优秀学生干部</li>
-                    </ul>
-                </div>
+            <div class="ln-skills-head ln-major-motion text-center mb-14 md:mb-16">
+                <p class="ln-eyebrow mb-4 text-center">Capabilities</p>
+                <h2 class="ln-display text-6xl md:text-8xl ln-clip-title inline-block">技能</h2>
             </div>
-        </div>
-    </section>
-
-    <section id="ip" class="py-24 md:py-32 bg-[#080808]">
-        <div class="max-w-[1200px] mx-auto px-5">
-            <h2 class="ln-display text-6xl md:text-8xl mb-16 ln-reveal">知识产权</h2>
-            <div class="grid md:grid-cols-2 gap-5 ln-reveal text-sm text-white/55">
-                <div class="border border-white/10 p-8">
-                    <h3 class="text-[#d4ff00] text-xs uppercase tracking-widest mb-4">发明专利</h3>
-                    <p>基于 LCSS-拓扑特征融合的滑板动作识别和互动方法<br><span class="text-white/35 text-xs mt-2 block">2025108867126</span></p>
-                </div>
-                <div class="border border-white/10 p-8">
-                    <h3 class="text-[#d4ff00] text-xs uppercase tracking-widest mb-4">外观设计</h3>
-                    <p>酒器套装（儒韵）<br><span class="text-white/35 text-xs mt-2 block">2024305519423</span></p>
-                </div>
-                <div class="border border-white/10 p-8">
-                    <h3 class="text-[#d4ff00] text-xs uppercase tracking-widest mb-4">软著</h3>
-                    <p class="mb-4">智能滑板运动分析与评估系统 · 2025SR0447984</p>
-                    <p>Ansoul 情绪记录与沉浸式体验软件 · 2025SR0129312</p>
-                </div>
-                <div class="border border-white/10 p-8">
-                    <h3 class="text-[#d4ff00] text-xs uppercase tracking-widest mb-4">美术作品</h3>
-                    <p class="space-y-3">
-                        <span class="block">情绪精灵表情系列 · 陕作登字-2024-F-00056913</span>
-                        <span class="block">情绪精灵 logo · 国作登字-2025-F-00003018</span>
-                        <span class="block">For the Street · 国作登字-2025-F-00064825</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="skills" class="py-24 md:py-32 bg-[#050505] border-t border-white/5">
-        <div class="max-w-[1200px] mx-auto px-5">
-            <h2 class="ln-display text-6xl md:text-8xl text-center mb-16 ln-reveal">技能</h2>
-            <div class="grid md:grid-cols-2 gap-5 ln-reveal">
-                <div class="border border-white/10 p-8 border-t-2 border-t-[#d4ff00]">
+            <div class="grid md:grid-cols-2 gap-5">
+                <div class="ln-surface-card ln-charge-border border border-white/10 p-8 border-t-2 border-t-[var(--ln-lime)] rounded-sm">
                     <h3 class="font-bold text-lg mb-4">AI 产品设计</h3>
-                    <p class="text-sm text-white/55 leading-relaxed">Figma / Axure / PRD 全链路；SD、Coze、Gemini、通义等 AIGC 工具。</p>
+                    <p class="text-sm text-white/[0.58] leading-relaxed">Figma / Axure / PRD 全链路；SD、Coze、Gemini、通义等 AIGC 工具。</p>
                 </div>
-                <div class="border border-white/10 p-8 border-t-2 border-t-white/30">
+                <div class="ln-surface-card ln-charge-border border border-white/10 p-8 border-t-2 border-t-[var(--ln-lime)] rounded-sm">
                     <h3 class="font-bold text-lg mb-4">技术开发</h3>
-                    <p class="text-sm text-white/55 leading-relaxed">Python、TypeScript、C#；React / RN / Node；VisionOS、Swift、Blender。</p>
+                    <p class="text-sm text-white/[0.58] leading-relaxed">Python、TypeScript、C#；React / RN / Node；VisionOS、Swift、Blender。</p>
                 </div>
-                <div class="border border-white/10 p-8 border-t-2 border-t-white/30">
+                <div class="ln-surface-card ln-charge-border border border-white/10 p-8 border-t-2 border-t-[var(--ln-lime)] rounded-sm">
                     <h3 class="font-bold text-lg mb-4">设计创意</h3>
-                    <p class="text-sm text-white/55 leading-relaxed">交互与服务设计、空间交互、Figma / Blender / UE。</p>
+                    <p class="text-sm text-white/[0.58] leading-relaxed">交互与服务设计、空间交互、Figma / Blender / UE。</p>
                 </div>
-                <div class="border border-white/10 p-8 border-t-2 border-t-white/30">
+                <div class="ln-surface-card ln-charge-border border border-white/10 p-8 border-t-2 border-t-[var(--ln-lime)] rounded-sm">
                     <h3 class="font-bold text-lg mb-4">用研与数据</h3>
-                    <p class="text-sm text-white/55 leading-relaxed">问卷、访谈、可用性测试；SUS、Pref；数据清洗与量化分析。</p>
+                    <p class="text-sm text-white/[0.58] leading-relaxed">问卷、访谈、可用性测试；SUS、Pref；数据清洗与量化分析。</p>
+                </div>
+            </div>
+        </div>
+        <div class="ln-full-bleed-x ln-skill-logos ln-major-motion" aria-label="常用工具与软件标识">
+            <div class="ln-skill-logos__viewport">
+                <div class="ln-skill-logos__track">
+                    <div class="ln-skill-logos__segment">
+                        <span class="ln-skill-logos__chip" title="Figma"><img src="https://cdn.simpleicons.org/figma/F24E1E" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="TypeScript"><img src="https://cdn.simpleicons.org/typescript/3178C6" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Python"><img src="https://cdn.simpleicons.org/python/3776AB" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="React"><img src="https://cdn.simpleicons.org/react/61DAFB" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Node.js"><img src="https://cdn.simpleicons.org/nodedotjs/339933" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="C#"><img src="https://cdn.simpleicons.org/csharp/239120" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Swift"><img src="https://cdn.simpleicons.org/swift/F05138" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Blender"><img src="https://cdn.simpleicons.org/blender/E87D0D" alt=""></span>
+                        <span class="ln-skill-logos__chip ln-skill-logos__chip--void" title="Unreal Engine"><img src="https://cdn.simpleicons.org/unrealengine/FFFFFF" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Git"><img src="https://cdn.simpleicons.org/git/F05032" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="VS Code"><img src="https://cdn.simpleicons.org/visualstudiocode/007ACC" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Vite"><img src="https://cdn.simpleicons.org/vite/646CFF" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Tailwind CSS"><img src="https://cdn.simpleicons.org/tailwindcss/06B6D4" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Docker"><img src="https://cdn.simpleicons.org/docker/2496ED" alt=""></span>
+                        <span class="ln-skill-logos__chip ln-skill-logos__chip--lit" title="Notion"><img src="https://cdn.simpleicons.org/notion/000000" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Framer"><img src="https://cdn.simpleicons.org/framer/0055FF" alt=""></span>
+                        <span class="ln-skill-logos__chip ln-skill-logos__chip--lit" title="Apple / Swift 生态"><img src="https://cdn.simpleicons.org/apple/000000" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="OpenAI"><img src="https://cdn.simpleicons.org/openai/412991" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Google"><img src="https://cdn.simpleicons.org/google/4285F4" alt=""></span>
+                        <span class="ln-skill-logos__chip ln-skill-logos__chip--void" title="Vercel"><img src="https://cdn.simpleicons.org/vercel/FFFFFF" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Supabase"><img src="https://cdn.simpleicons.org/supabase/3FCF8E" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="PyTorch"><img src="https://cdn.simpleicons.org/pytorch/EE4C2C" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Adobe Illustrator"><img src="https://cdn.simpleicons.org/adobeillustrator/FF9A00" alt=""></span>
+                        <span class="ln-skill-logos__chip ln-skill-logos__chip--lit" title="Unity"><img src="https://cdn.simpleicons.org/unity/222C37" alt=""></span>
+                    </div>
+                    <div class="ln-skill-logos__segment" aria-hidden="true">
+                        <span class="ln-skill-logos__chip" title="Figma"><img src="https://cdn.simpleicons.org/figma/F24E1E" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="TypeScript"><img src="https://cdn.simpleicons.org/typescript/3178C6" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Python"><img src="https://cdn.simpleicons.org/python/3776AB" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="React"><img src="https://cdn.simpleicons.org/react/61DAFB" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Node.js"><img src="https://cdn.simpleicons.org/nodedotjs/339933" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="C#"><img src="https://cdn.simpleicons.org/csharp/239120" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Swift"><img src="https://cdn.simpleicons.org/swift/F05138" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Blender"><img src="https://cdn.simpleicons.org/blender/E87D0D" alt=""></span>
+                        <span class="ln-skill-logos__chip ln-skill-logos__chip--void" title="Unreal Engine"><img src="https://cdn.simpleicons.org/unrealengine/FFFFFF" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Git"><img src="https://cdn.simpleicons.org/git/F05032" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="VS Code"><img src="https://cdn.simpleicons.org/visualstudiocode/007ACC" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Vite"><img src="https://cdn.simpleicons.org/vite/646CFF" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Tailwind CSS"><img src="https://cdn.simpleicons.org/tailwindcss/06B6D4" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Docker"><img src="https://cdn.simpleicons.org/docker/2496ED" alt=""></span>
+                        <span class="ln-skill-logos__chip ln-skill-logos__chip--lit" title="Notion"><img src="https://cdn.simpleicons.org/notion/000000" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Framer"><img src="https://cdn.simpleicons.org/framer/0055FF" alt=""></span>
+                        <span class="ln-skill-logos__chip ln-skill-logos__chip--lit" title="Apple / Swift 生态"><img src="https://cdn.simpleicons.org/apple/000000" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="OpenAI"><img src="https://cdn.simpleicons.org/openai/412991" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Google"><img src="https://cdn.simpleicons.org/google/4285F4" alt=""></span>
+                        <span class="ln-skill-logos__chip ln-skill-logos__chip--void" title="Vercel"><img src="https://cdn.simpleicons.org/vercel/FFFFFF" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Supabase"><img src="https://cdn.simpleicons.org/supabase/3FCF8E" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="PyTorch"><img src="https://cdn.simpleicons.org/pytorch/EE4C2C" alt=""></span>
+                        <span class="ln-skill-logos__chip" title="Adobe Illustrator"><img src="https://cdn.simpleicons.org/adobeillustrator/FF9A00" alt=""></span>
+                        <span class="ln-skill-logos__chip ln-skill-logos__chip--lit" title="Unity"><img src="https://cdn.simpleicons.org/unity/222C37" alt=""></span>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="py-24 md:py-40 bg-[#080808]">
-        <div class="max-w-4xl mx-auto px-5 text-center ln-reveal ln-line-group">
-            <p class="text-[11px] uppercase tracking-[0.4em] text-[#d4ff00] mb-6"><span class="ln-line ln-line-inline" style="--ln-i:0">Contact</span></p>
-            <h2 class="ln-display text-6xl md:text-8xl mb-12"><span class="ln-line" style="--ln-i:1">保持联系</span></h2>
-            <div class="grid sm:grid-cols-2 gap-4 text-left">
-                <a href="tel:15666017675" class="block p-6 border border-white/10 hover:border-[#d4ff00]/50 transition-colors">
-                    <div class="text-[10px] uppercase tracking-widest text-white/35 mb-2">电话</div>
-                    <div class="font-mono text-lg">15666017675</div>
-                </a>
-                <a href="mailto:2132044993@qq.com" class="block p-6 border border-white/10 hover:border-[#d4ff00]/50 transition-colors">
-                    <div class="text-[10px] uppercase tracking-widest text-white/35 mb-2">邮箱</div>
-                    <div class="font-mono text-sm break-all">2132044993@qq.com</div>
-                </a>
-                <div class="p-6 border border-white/10">
-                    <div class="text-[10px] uppercase tracking-widest text-white/35 mb-2">微信</div>
-                    <div class="font-mono">WYJ0408317675</div>
+    <section id="contact" class="ln-section-major ln-bg-raised border-t border-white/[0.06]">
+        <div class="max-w-6xl mx-auto px-5 text-center ln-line-group">
+            <div class="ln-contact-head ln-major-motion">
+                <p class="ln-eyebrow tracking-[0.4em] mb-6"><span class="ln-line ln-line-inline" style="--ln-i:0">Contact</span></p>
+                <h2 class="ln-display text-6xl md:text-8xl mb-12 text-[var(--ln-lime)]"><span class="ln-line" style="--ln-i:1">联系我</span></h2>
+            </div>
+            <div class="flex flex-col lg:flex-row lg:flex-nowrap lg:justify-center gap-4 text-left ln-stagger">
+                <div class="ln-magnetic w-full lg:flex-1 lg:min-w-0 lg:max-w-[15rem]">
+                    <a href="tel:15666017675" class="ln-surface-card block p-6 border border-white/10 transition-colors rounded-sm">
+                        <div class="text-[10px] uppercase tracking-widest text-white/[0.46] mb-2">电话</div>
+                        <div class="font-mono text-lg">15666017675</div>
+                    </a>
                 </div>
-                <div class="p-6 border border-white/10">
-                    <div class="text-[10px] uppercase tracking-widest text-white/35 mb-2">城市</div>
-                    <div>长沙 · 杭州</div>
+                <div class="ln-magnetic w-full lg:flex-1 lg:min-w-0 lg:max-w-[15rem]">
+                    <a href="mailto:2132044993@qq.com" class="ln-surface-card block p-6 border border-white/10 transition-colors rounded-sm">
+                        <div class="text-[10px] uppercase tracking-widest text-white/[0.46] mb-2">邮箱</div>
+                        <div class="font-mono text-sm break-all">2132044993@qq.com</div>
+                    </a>
+                </div>
+                <div class="ln-magnetic w-full lg:flex-1 lg:min-w-0 lg:max-w-[15rem]">
+                    <div class="ln-surface-card p-6 border border-white/10 rounded-sm">
+                        <div class="text-[10px] uppercase tracking-widest text-white/[0.46] mb-2">微信</div>
+                        <div class="font-mono">WYJ0408317675</div>
+                    </div>
+                </div>
+                <div class="ln-magnetic w-full lg:flex-1 lg:min-w-0 lg:max-w-[15rem]">
+                    <div class="ln-surface-card p-6 border border-white/10 rounded-sm">
+                        <div class="text-[10px] uppercase tracking-widest text-white/[0.46] mb-2">城市</div>
+                        <div>长沙 · 杭州</div>
+                    </div>
                 </div>
             </div>
-            <p class="mt-12 text-xs text-white/30">中共党员</p>
+            <p class="mt-12 text-xs text-white/[0.42]">中共党员</p>
         </div>
     </section>
 
-    <footer class="py-16 border-t border-white/10 bg-black">
-        <div class="max-w-[1200px] mx-auto px-5 flex flex-col md:flex-row justify-between items-center gap-8 text-xs uppercase tracking-widest text-white/35">
+    <footer class="py-16 md:py-20 border-t border-white/[0.08] ln-bg-deep">
+        <div class="max-w-[1200px] mx-auto px-5 flex flex-col md:flex-row justify-between items-center gap-8 text-xs uppercase tracking-widest text-white/[0.48]">
             <span>© 2026 王耀颉 · try 实验页</span>
-            <div class="flex gap-8">
-                <a href="index.html" class="hover:text-[#d4ff00] transition-colors">主站</a>
-                <a href="apple-index.html" class="hover:text-[#d4ff00] transition-colors">Apple 版</a>
-                <a href="#hero" onclick="smoothScrollTo('hero'); return false;" class="hover:text-[#d4ff00] transition-colors">顶部</a>
+            <div class="flex flex-wrap justify-center gap-6 md:gap-8">
+                <a href="index.html" class="hover:text-[var(--ln-lime)] transition-colors rounded-sm">主站</a>
+                <a href="apple-index.html" class="hover:text-[var(--ln-lime)] transition-colors rounded-sm">Apple 版</a>
+                <a href="#hero" onclick="smoothScrollTo('hero'); return false;" class="hover:text-[var(--ln-lime)] transition-colors rounded-sm">顶部</a>
             </div>
         </div>
-        <p class="text-center text-[10px] text-white/20 mt-8 px-6">视觉参考：运动员个人站常见的全屏叙事、荧光点缀与大字标题（如 <a href="https://landonorris.com/" class="underline hover:text-white/40">landonorris.com</a>），非商业复刻。</p>
+        <div class="ln-footer-sig max-w-[1200px] mx-auto px-5">
+            <p class="ln-footer-sig__mark">imad — interaction · product · code</p>
+            <p class="ln-footer-sig__name">王耀颉 · 个人实验站 · 长沙 / 杭州</p>
+        </div>
+        <p class="text-center text-[10px] text-white/[0.32] mt-6 px-6 max-w-2xl mx-auto leading-relaxed">视觉参考：运动员个人站常见的全屏叙事、荧光点缀与大字标题（如 <a href="https://landonorris.com/" class="underline underline-offset-2 hover:text-white/[0.58] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--ln-lime)] rounded-sm">landonorris.com</a>），非商业复刻。</p>
     </footer>
 
     <div id="project-modal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 md:p-6">
         <div id="modal-backdrop" class="absolute inset-0 bg-black/90 backdrop-blur-sm cursor-pointer" aria-hidden="true"></div>
-        <div id="modal-panel" class="relative z-10 bg-[#0a0a0a] max-w-4xl w-full max-h-[92vh] overflow-hidden border border-white/10 shadow-2xl shadow-[#d4ff00]/5">
+        <div id="modal-panel" class="relative z-10 bg-[var(--ln-bg-modal)] max-w-4xl w-full max-h-[92vh] overflow-hidden border border-white/10 shadow-2xl shadow-[0_25px_50px_-12px_rgba(var(--ln-accent-rgb),0.05)]">
             <div class="flex justify-between items-center border-b border-white/10 px-6 py-4">
                 <div id="modal-project-title" class="text-xl md:text-2xl font-bold tracking-tight pr-4"></div>
-                <button type="button" onclick="closeModal()" class="text-3xl leading-none text-white/40 hover:text-[#d4ff00] transition shrink-0" aria-label="关闭">&times;</button>
+                <button type="button" onclick="closeModal()" class="text-3xl leading-none text-white/40 hover:text-[var(--ln-lime)] transition shrink-0" aria-label="关闭">&times;</button>
             </div>
             <div class="p-6 md:p-8 overflow-auto" style="max-height: calc(92vh - 140px)">
                 <div id="modal-content" class="prose prose-invert prose-sm md:prose-base max-w-none"></div>
@@ -462,6 +1884,8 @@
             </div>
         </div>
     </div>
+
+    <div class="ln-cursor" id="ln-cursor" aria-hidden="true"></div>
 
     <script type="application/json" id="portfolio-projects">
 [
@@ -496,21 +1920,6 @@
     "description": "<p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">项目定位</span>：专为临床医生设计，基于 VisionOS 的青少年情绪障碍 AR 协同治疗系统，将沙盘疗法与 AR 空间交互、AI Agent 结合，降低诊疗防备心理，辅助可视化、可量化心理诊疗。</p><div class=\"grid md:grid-cols-2 gap-8\"><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">核心工作</h4><ul class=\"space-y-3 text-sm text-gray-300 list-disc pl-5\"><li><strong class=\"text-white\">临床调研</strong>：走访湖大心理咨询室、长沙市三医院，患者与医生深度访谈</li><li><strong class=\"text-white\">系统设计</strong>：「诊疗前-中-后」全流程；IP 化身 AI Agent，行为感知、大模型分析、诊疗引导与医生辅助决策</li><li><strong class=\"text-white\">开发落地</strong>：Figma、Blender 建模，Swift + Reality Composer Pro 开发 VisionOS 应用；AR 交互、AI 生成三维模型、诊疗数据记录分析</li></ul></div><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">技术栈</h4><p class=\"text-sm text-gray-400\">VisionOS、Swift、Reality Composer Pro、Blender、Figma、大语言模型、AI Agent</p><h4 class=\"text-[#0EA5E9] font-semibold mb-3 mt-8 text-sm tracking-widest\">项目成果</h4><ul class=\"space-y-2 text-sm text-gray-300 list-disc pl-5\"><li>软著 1 项、美术作品著作权 2 项</li><li>中国高校计算机大赛-移动应用创新赛 全国三等奖、华中赛区一等奖</li><li>全流程开发完成，筹备 VisionOS 应用商店上架</li></ul></div></div>"
   },
   {
-    "id": 3,
-    "title": "中远海运 - 船用装卸臂智能对接系统交互平台",
-    "subtitle": "融合机器视觉与数字孪生的智能对接平台",
-    "period": "2024.12 - 2025.09",
-    "role": "项目负责人",
-    "tags": [
-      "工业设计",
-      "AI产品",
-      "数字孪生"
-    ],
-    "image": "https://picsum.photos/id/180/800/600",
-    "category": "工业设计",
-    "description": "<p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">项目定位</span>：响应港口智能化升级，针对传统装卸对接信息杂乱、人工效率低、安全风险高，打造融合机器视觉与数字孪生的智能对接平台，实现船岸装卸全流程智能化。</p><div class=\"grid md:grid-cols-2 gap-8\"><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">核心工作</h4><ul class=\"space-y-3 text-sm text-gray-300 list-disc pl-5\"><li><strong class=\"text-white\">需求调研</strong>：8 场需求会、15 名一线作业人员深访，拆解对接与极端天气等全场景需求</li><li><strong class=\"text-white\">产品设计</strong>：「操作员-调度员-管理端」三层架构，完整方案与交互原型，对齐 QT 开发标准</li><li><strong class=\"text-white\">体验优化</strong>：10+ 轮用户测试，优化操作路径与功能适配</li></ul></div><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">项目成果</h4><p class=\"text-emerald-400 font-medium mb-4\">系统正式交付：装卸效率提升约 75%，人力成本降低约 50%，安全事故率下降约 90%</p><p class=\"text-sm text-gray-300\">入选 2025 中远海运官方年度十大「智见」AI 场景。</p></div></div>"
-  },
-  {
     "id": 4,
     "title": "AstroFit",
     "subtitle": "基于微重力环境的太空健身外骨骼系统",
@@ -541,38 +1950,213 @@
     "description": "<p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">项目定位</span>：以自我审视为核心，通过互动装置与生成式设计，引导参与者从自我与他人双重视角探索自我，缓解外界眼光带来的焦虑与自我怀疑。</p><p class=\"text-sm text-gray-300 mb-6\"><strong class=\"text-white\">核心工作</strong>：完整互动体验流程，视觉设计与创意编程；基于问答数据的个性化认知海报 AI 生成，多风格海报体系。</p><p class=\"text-sm text-gray-300\"><strong class=\"text-[#0EA5E9]\">成果</strong>：G-CROSS 跨界艺术创意奖国家级铜奖。</p>"
   },
   {
-    "id": 6,
-    "title": "赛博佛祖",
-    "subtitle": "佛教文化数字化互动产品",
-    "period": "2025.11 - 2026.03",
-    "role": "项目主导人",
+    "id": 9,
+    "title": "九衢云",
+    "subtitle": "城市群跨城通勤场景的未来低空出行系统设计",
+    "period": "2024 — 2025",
+    "role": "设计主导",
     "tags": [
-      "AI产品",
-      "文化科技",
-      "0到1落地"
+      "低空经济",
+      "系统设计",
+      "出行创新"
     ],
-    "image": "https://picsum.photos/id/292/800/600",
-    "category": "AI产品",
-    "description": "<p class=\"text-gray-400 text-sm mb-2\">芒果 TV（山海）</p><p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">项目定位</span>：佛教文化数字化互动产品，AI 问答、抽签解签等核心功能，0→1 演示版落地，支撑后续商业化投放。</p><div class=\"grid md:grid-cols-2 gap-8\"><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">核心工作</h4><ul class=\"space-y-3 text-sm text-gray-300 list-disc pl-5\"><li>市场调研与竞品分析，PRD 撰写，跨部门协同推进</li><li>搭建佛教知识库；Python + FFmpeg 视频合成工作流</li><li>参与 TTS 与大模型选型，优化数字人交互，保障达标上线</li></ul></div><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">技术栈</h4><p class=\"text-sm text-gray-400\">Python、FFmpeg、通义千问 plus、商汤 Seko、即梦 AI、可灵 AI</p></div></div>"
+    "image": "https://picsum.photos/id/649/800/600",
+    "category": "系统设计",
+    "description": "<p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">方案概述</span>：在粤港澳大湾区加速融合与低空经济快速发展的背景下，本方案聚焦于构建一套适用于城市群跨城高频通勤场景的未来低空出行系统。我们以「三圈层两轴线」网络结构为核心，结合 AI 智能调度系统，打造一体化、高效、可拓展的城市群低空交通体系。通过系统性方法识别核心需求，并转化为可实施的设计路径，方案实现了从城市级枢纽布局到用户无感通行的整体闭环，兼顾跨城通勤、日常运行与应急转运等多元场景，助力构建未来城市群低空出行新范式。</p>"
   },
   {
-    "id": 7,
-    "title": "山海映真小程序",
-    "subtitle": "V1.0 / V2.0 产品迭代",
-    "period": "2025.11 - 2026.03",
-    "role": "核心产品负责人",
+    "id": 8,
+    "title": "GenZ-Alpha",
+    "subtitle": "基于抖音的代际行为研究与论文",
+    "period": "2023 — 2024",
+    "role": "研究主导",
     "tags": [
-      "小程序",
-      "AR",
-      "文创"
+      "用户研究",
+      "代际行为",
+      "论文"
     ],
-    "image": "https://picsum.photos/id/106/800/600",
-    "category": "产品迭代",
-    "description": "<p class=\"text-gray-400 text-sm mb-2\">芒果 TV（山海）</p><p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">项目定位</span>：整合 AI 生成、实体打印、AR 互动的文创小程序；配合芒果跨年晚会落地与版本迭代，形成完整产品链路。</p><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">核心工作</h4><ul class=\"space-y-3 text-sm text-gray-300 list-disc pl-5\"><li><strong class=\"text-white\">V1.0</strong>：跨年晚会功能落地，193 笔有效订单，转化率 5.63%</li><li><strong class=\"text-white\">V2.0</strong>：基于用户数据升级，补齐 AR 扫文物活化，形成「AI 生成 - 实体打印 - AR 互动」闭环</li></ul></div>"
+    "image": "https://picsum.photos/id/96/800/600",
+    "category": "研究",
+    "description": "<p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">研究主题</span>：围绕 GenZ 与 Alpha 世代在抖音等平台上的行为差异与代际特征，开展问卷、行为数据与质性访谈相结合的混合研究。</p><p class=\"text-sm text-gray-300 mb-6\"><strong class=\"text-white\">核心工作</strong>：文献与竞品梳理、研究设计与量表搭建、数据采集与清洗、统计分析与可视化；撰写研究报告与学术论文。</p><p class=\"text-sm text-gray-400\">成果形式：研究论文与答辩材料（具体刊名/会议录用信息可按最终发表补充）。</p>"
   }
 ]
     </script>
+    <script type="application/json" id="experience-projects">
+[
+  {
+    "id": 101,
+    "title": "赛博佛祖",
+    "subtitle": "佛教文化数字化互动产品",
+    "org": "芒果 TV（山海）",
+    "period": "2025.11 — 2026.03",
+    "role": "项目主导人",
+    "tags": ["AI产品", "文化科技", "0→1"],
+    "logo": "https://www.google.com/s2/favicons?domain=mgtv.com&sz=128",
+    "image": "https://picsum.photos/id/292/800/600",
+    "description": "<p class=\"text-gray-400 text-sm mb-2\">芒果 TV（山海）</p><p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">项目定位</span>：佛教文化数字化互动产品，AI 问答、抽签解签等核心功能，0→1 演示版落地，支撑后续商业化投放。</p><div class=\"grid md:grid-cols-2 gap-8\"><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">核心工作</h4><ul class=\"space-y-3 text-sm text-gray-300 list-disc pl-5\"><li>市场调研与竞品分析，PRD 撰写，跨部门协同推进</li><li>搭建佛教知识库；Python + FFmpeg 视频合成工作流</li><li>参与 TTS 与大模型选型，优化数字人交互，保障达标上线</li></ul></div><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">技术栈</h4><p class=\"text-sm text-gray-400\">Python、FFmpeg、通义千问 plus、商汤 Seko、即梦 AI、可灵 AI</p></div></div>"
+  },
+  {
+    "id": 102,
+    "title": "山海映真小程序",
+    "subtitle": "V1.0 / V2.0 产品迭代",
+    "org": "芒果 TV（山海）",
+    "period": "2025.11 — 2026.03",
+    "role": "核心产品负责人",
+    "tags": ["小程序", "AR", "文创"],
+    "logo": "https://www.google.com/s2/favicons?domain=mgtv.com&sz=128",
+    "image": "https://picsum.photos/id/326/800/600",
+    "description": "<p class=\"text-gray-400 text-sm mb-2\">芒果 TV（山海）</p><p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">项目定位</span>：整合 AI 生成、实体打印、AR 互动的文创小程序；配合芒果跨年晚会落地与版本迭代，形成完整产品链路。</p><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">核心工作</h4><ul class=\"space-y-3 text-sm text-gray-300 list-disc pl-5\"><li><strong class=\"text-white\">V1.0</strong>：跨年晚会功能落地，193 笔有效订单，转化率 5.63%</li><li><strong class=\"text-white\">V2.0</strong>：基于用户数据升级，补齐 AR 扫文物活化，形成「AI 生成 - 实体打印 - AR 互动」闭环</li></ul></div>"
+  },
+  {
+    "id": 103,
+    "title": "船用装卸臂智能对接系统",
+    "subtitle": "融合机器视觉与数字孪生的港口对接平台",
+    "org": "中远海运",
+    "period": "2024.12 — 2025.09",
+    "role": "项目负责人",
+    "tags": ["工业设计", "AI产品", "数字孪生"],
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/COSCO_logo.svg/240px-COSCO_logo.svg.png",
+    "image": "https://picsum.photos/id/180/800/600",
+    "description": "<p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">项目定位</span>：响应港口智能化升级，针对传统装卸对接信息杂乱、人工效率低、安全风险高，打造融合机器视觉与数字孪生的智能对接平台，实现船岸装卸全流程智能化。</p><div class=\"grid md:grid-cols-2 gap-8\"><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">核心工作</h4><ul class=\"space-y-3 text-sm text-gray-300 list-disc pl-5\"><li><strong class=\"text-white\">需求调研</strong>：8 场需求会、15 名一线作业人员深访，拆解对接与极端天气等全场景需求</li><li><strong class=\"text-white\">产品设计</strong>：「操作员-调度员-管理端」三层架构，完整方案与交互原型，对齐 QT 开发标准</li><li><strong class=\"text-white\">体验优化</strong>：10+ 轮用户测试，优化操作路径与功能适配</li></ul></div><div><h4 class=\"text-[#0EA5E9] font-semibold mb-3 text-sm tracking-widest\">项目成果</h4><p class=\"text-emerald-400 font-medium mb-4\">系统正式交付：装卸效率提升约 75%，人力成本降低约 50%，安全事故率下降约 90%</p><p class=\"text-sm text-gray-300\">入选 2025 中远海运官方年度十大「智见」AI 场景。</p></div></div>"
+  },
+  {
+    "id": 104,
+    "title": "新一代 16 吨叉车",
+    "subtitle": "工业设计",
+    "org": "三一重工",
+    "period": "课题阶段",
+    "role": "工业设计",
+    "tags": ["工业设计", "装备"],
+    "logo": "https://logo.clearbit.com/sanygroup.com",
+    "image": "https://picsum.photos/id/28/800/600",
+    "description": "<p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">项目概述</span>：参与三一重工新一代 16 吨叉车工业设计与造型推演，围绕工程场景的人机、识别度与量产工艺进行方案输出与迭代。</p><p class=\"text-sm text-gray-400\">具体周期与保密细节可按投递材料调整表述。</p>"
+  },
+  {
+    "id": 105,
+    "title": "数字文化创意智能设计技术",
+    "subtitle": "文旅部重点实验室科研",
+    "org": "文旅部重点实验室",
+    "period": "在校期间",
+    "role": "科研参与",
+    "tags": ["科研", "数字文化"],
+    "logoIcon": "fa-landmark",
+    "image": "https://picsum.photos/id/443/800/600",
+    "description": "<p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">项目概述</span>：在湖南大学文旅部重点实验室参与数字文化创意与智能设计相关课题，支撑文化科技融合方向的研究与实验。</p>"
+  },
+  {
+    "id": 106,
+    "title": "山海璇玑大模型",
+    "subtitle": "文博场景商业化与产品设计",
+    "org": "芒果 TV（山海）",
+    "period": "2025.11 — 2026.03",
+    "role": "产品 / 设计参与",
+    "tags": ["大模型", "文博", "商业化"],
+    "logo": "https://www.google.com/s2/favicons?domain=mgtv.com&sz=128",
+    "image": "https://picsum.photos/id/512/800/600",
+    "description": "<p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">项目概述</span>：参与山海璇玑大模型在文博场景的产品化与商业化路径设计，包含需求梳理、方案协同与体验侧输出。</p>"
+  },
+  {
+    "id": 107,
+    "title": "山海听听",
+    "subtitle": "AI 智慧讲解平台",
+    "org": "芒果 TV（山海）",
+    "period": "2025.11 — 2026.03",
+    "role": "产品 / 设计参与",
+    "tags": ["AI", "讲解", "平台"],
+    "logo": "https://www.google.com/s2/favicons?domain=mgtv.com&sz=128",
+    "image": "https://picsum.photos/id/119/800/600",
+    "description": "<p class=\"text-gray-300 mb-6\"><span class=\"text-[#0EA5E9] font-semibold\">项目概述</span>：参与 AI 智慧讲解平台的产品与交互设计，支撑内容生产与讲解体验在业务侧落地。</p>"
+  }
+]
+    </script>
+    <script type="application/json" id="career-layout">
+{
+  "sections": [
+    {
+      "kind": "internship",
+      "org": "芒果 TV（山海）",
+      "period": "2025.11 — 2026.03",
+      "role": "AI 产品经理",
+      "bodyHtml": "<p class=\"text-white/70 leading-relaxed text-sm md:text-base\">主导<strong class=\"text-white\">赛博佛祖</strong> 0→1；负责<strong class=\"text-white\">山海映真</strong> 全版本迭代；参与<strong class=\"text-white\">山海璇玑</strong>、<strong class=\"text-white\">山海听听</strong> 设计与商业化。</p>",
+      "highlight": "亮点：0→1 演示版落地与多版本迭代，直接支撑业务侧上线与商业化探索。",
+      "experienceIds": [101, 102, 106, 107]
+    },
+    {
+      "kind": "org",
+      "org": "中远海运",
+      "period": "2024.12 — 2025.09",
+      "experienceIds": [103]
+    },
+    {
+      "kind": "org",
+      "org": "三一重工",
+      "period": "课题阶段",
+      "experienceIds": [104]
+    },
+    {
+      "kind": "org",
+      "org": "文旅部重点实验室",
+      "period": "在校期间",
+      "experienceIds": [105]
+    }
+  ]
+}
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
     <script src="try-script.js"></script>
+    <script>
+    (function () {
+      function lnUnhideTryStatic() {
+        document.querySelectorAll(".ln-line").forEach(function (el) {
+          el.classList.add("ln-line-visible");
+        });
+        document.querySelectorAll(".ln-reveal").forEach(function (el) {
+          el.classList.add("ln-reveal-on");
+        });
+        var hi = document.getElementById("hero-parallax-img");
+        if (hi) {
+          hi.classList.remove("ln-hero-img-enter");
+          hi.classList.add("ln-hero-img-ready");
+        }
+      }
+      window.addEventListener("load", function () {
+        if (typeof window.tryPageInit === "function") {
+          window.tryPageInit();
+        } else {
+          console.warn("try-script.js 未执行，已降级为静态显示");
+          lnUnhideTryStatic();
+        }
+      });
+      function initLogoScrubScale() {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        if (typeof window.gsap === "undefined" || !window.ScrollTrigger) return;
+        window.gsap.utils.toArray(".ln-scrub-scale .ln-scrub-scale-img").forEach(function (img) {
+          var wrap = img.closest(".ln-scrub-scale");
+          if (!wrap) return;
+          window.gsap.fromTo(
+            img,
+            { scale: 1.12 },
+            {
+              scale: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: wrap,
+                start: "top 90%",
+                end: "top 38%",
+                scrub: 0.55,
+              },
+            }
+          );
+        });
+      }
+      window.addEventListener("load", function () {
+        requestAnimationFrame(function () {
+          setTimeout(initLogoScrubScale, 120);
+        });
+      });
+    })();
+    </script>
 </body>
 </html>
